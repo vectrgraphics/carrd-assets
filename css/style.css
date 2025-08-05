@@ -40,7 +40,7 @@ body {
 }
 
 .slide:hover .links .icon img {
-  filter: brightness(2);
+  filter: brightness(1);
 }
 
 .prev, .next {
