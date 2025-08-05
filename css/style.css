@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  background: #0a0a0a;
+  background: #09131C;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@ body {
 }
 
 .slide:hover .links .icon img {
-  filter: brightness(1.3);
+  filter: brightness(2);
 }
 
 .prev, .next {
@@ -74,6 +74,6 @@ body {
 }
 
 @keyframes fade {
-  from {opacity: .4}
+  from {opacity: .5}
   to {opacity: 1}
 }
