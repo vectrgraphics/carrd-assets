@@ -1,20 +1,32 @@
-let slideIndex = 0;
-showSlides(slideIndex);
+let currentIndex = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const nextBtn = document.querySelector('.arrow.right');
+const prevBtn = document.querySelector('.arrow.left');
 
-document.querySelector('.prev').addEventListener('click', () => {
-  showSlides(slideIndex -= 1);
-});
+function showSlide(newIndex) {
+  if (newIndex === currentIndex) return;
 
-document.querySelector('.next').addEventListener('click', () => {
-  showSlides(slideIndex += 1);
-});
+  const currentSlide = slides[currentIndex];
+  const nextSlide = slides[newIndex];
 
-function showSlides(n) {
-  let slides = document.getElementsByClassName("slide");
-  if (n >= slides.length) {slideIndex = 0}
-  if (n < 0) {slideIndex = slides.length - 1}
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-  slides[slideIndex].style.display = "block";
+  currentSlide.classList.remove('active');
+  currentSlide.classList.add('exit-left');
+
+  nextSlide.classList.add('active');
+  nextSlide.classList.remove('exit-left');
+
+  setTimeout(() => {
+    currentSlide.classList.remove('exit-left');
+    currentIndex = newIndex;
+  }, 800);
 }
+
+nextBtn.addEventListener('click', () => {
+  let newIndex = (currentIndex + 1) % slides.length;
+  showSlide(newIndex);
+});
+
+prevBtn.addEventListener('click', () => {
+  let newIndex = (currentIndex - 1 + slides.length) % slides.length;
+  showSlide(newIndex);
+});
