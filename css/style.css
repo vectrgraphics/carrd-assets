@@ -71,6 +71,10 @@ body {
   transform: scale(1.1);     /* slight zoom on hover */
 }
 
+.chevron img {
+  filter: invert(1) brightness(2);
+}
+
 .chevron {
   display: flex;
   position: absolute;
