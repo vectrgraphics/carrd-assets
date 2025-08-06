@@ -41,7 +41,7 @@
       height: 60px;
       margin: 0 15px;
     }
-    .arrow {
+    .chevron {
       position: absolute;
       top: 50%;
       width: 40px;
@@ -52,5 +52,5 @@
       z-index: 10;
       transform: translateY(-50%);
     }
-    .arrow.left { left: 20px; transform: rotate(180deg) translateY(50%); }
-    .arrow.right { right: 20px; }
+    .chevron.left { left: 20px; transform: rotate(180deg) translateY(50%); }
+    .chevron.right { right: 20px; }
