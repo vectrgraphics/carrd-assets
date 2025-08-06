@@ -38,6 +38,24 @@ body {
   }
 }
 
+.music-links {
+  display: flex;
+  justify-content: center;   /* center horizontally */
+  gap: 20px;                 /* spacing between icons */
+  margin-top: 20px;          /* space above the icons */
+}
+
+.music-links img {
+  width: 40px;               /* or whatever size you want */
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.music-links img:hover {
+  transform: scale(1.1);     /* slight zoom on hover */
+}
+
 .chevron {
   position: absolute;
   top: 50%;
