@@ -6,6 +6,18 @@ body {
   height: 100vh;
 }
 
+.cover-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cover-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .carousel-slide {
   position: absolute;
   top: 50%;
