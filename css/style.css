@@ -76,7 +76,6 @@ body {
 }
 
 .chevron {
-  display: flex;
   position: absolute;
   top: 50%;
   width: 50px;
