@@ -20,7 +20,7 @@ function showSlide(newIndex) {
   setTimeout(() => {
     currentSlide.classList.remove('exit-left');
     currentIndex = newIndex;
-  }, 1024);
+  }, 512);
 }
 
 nextBtn.addEventListener('click', () => {

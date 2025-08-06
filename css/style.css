@@ -10,8 +10,8 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 1024px;
-  height: 1024px;
+  width: 512px;
+  height: 512px;
   background-size: cover;
   background-position: center;
   transform: translate(-50%, -50%) translateX(100%);
@@ -31,7 +31,7 @@ body {
   opacity: 0.1;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 512px) {
   .carousel-slide {
     width: 90vw;
     height: 90vw;
@@ -42,7 +42,7 @@ body {
   display: flex;
   justify-content: center;   /* center horizontally */
   gap: 20px;                 /* spacing between icons */
-  margin-top: 20px;          /* space above the icons */
+  margin-bottom: 20px;       /* space above the icons */
 }
 
 .music-links img {
