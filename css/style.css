@@ -1,8 +1,6 @@
 body {
   margin: 0;
-  background: black;
   overflow: hidden;
-  font-family: sans-serif;
   height: 100vh;
 }
 
@@ -32,7 +30,7 @@ body {
   background-size: cover;
   background-position: center;
   transform: translate(-50%, -50%) translateX(100%);
-  opacity: 0.1;
+  opacity: 0;
   transition: transform 0.8s ease, opacity 0.8s ease;
   z-index: 1;
 }
@@ -45,7 +43,7 @@ body {
 
 .carousel-slide.exit-left {
   transform: translate(-50%, -50%) translateX(-100%);
-  opacity: 0.1;
+  opacity: 0;
 }
 
 @media (max-width: 512px) {
@@ -59,7 +57,7 @@ body {
   display: flex;
   justify-content: center;   /* center horizontally */
   gap: 20px;                 /* spacing between icons */
-  margin-bottom: 20px;       /* space above the icons */
+  margin-top: 20px;          /* space above the icons */
 }
 
 .music-links img {
@@ -78,7 +76,7 @@ body {
   top: 50%;
   width: 50px;
   height: 50px;
-  background: none;
+  background: white;
   border: none;
   cursor: pointer;
   z-index: 10;
