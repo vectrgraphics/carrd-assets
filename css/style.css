@@ -71,10 +71,6 @@ body {
   transform: scale(1.1);     /* slight zoom on hover */
 }
 
-.chevron img {
-  filter: invert(1) brightness(2);
-}
-
 .chevron {
   position: absolute;
   top: 50%;
@@ -87,10 +83,10 @@ body {
 }
 
 .chevron.left {
-  left: 20px;
+  left: calc(50% - 272px); /* image is 512px wide + padding */
   transform: rotate(180deg) translateY(50%);
 }
 
 .chevron.right {
-  right: 20px;
+  right: calc(50% - 272px);
 }
