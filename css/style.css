@@ -14,6 +14,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 }
 
 .carousel-slide {
@@ -57,10 +58,21 @@ body {
 }
 
 .music-links {
-  display: flex;
-  justify-content: center;   /* center horizontally */
-  gap: 40px;                 /* spacing between icons */
   margin-top: 0px;          /* space above the icons */
+}
+
+.music-links {
+  position: absolute;
+  bottom: -60px; /* adjust as needed */
+  justify-content: center;   /* center horizontally */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+/*  margin-top: 0px;          /* space above the icons */
 }
 
 .music-links img {
@@ -88,6 +100,7 @@ body {
 .carousel-slide.active .music-links {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
 }
 
 .carousel-slide.exit-left .music-links {

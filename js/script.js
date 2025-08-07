@@ -30,3 +30,12 @@
     let newIndex = (currentIndex - 1 + slides.length) % slides.length;
     showSlide(newIndex);
   });
+
+
+
+slides.forEach((slide, i) => {
+  slide.classList.remove('active');
+  if (i === currentIndex) {
+    slide.classList.add('active');
+  }
+});
