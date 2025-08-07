@@ -74,8 +74,8 @@ body {
 .chevron {
   position: absolute;
   top: 50%;
-  width: 53px;
-  height: 80px;
+  width: 53%;
+  height: 80%;
   border: none;
   cursor: pointer;
   z-index: 10;
