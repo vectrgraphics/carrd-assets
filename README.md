@@ -1,2 +1,2 @@
-# carrd-assets-starter
+# carrd-assets
 
