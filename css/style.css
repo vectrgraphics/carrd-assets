@@ -1,81 +1,116 @@
-
 body {
   margin: 0;
-  background: #000;
   overflow: hidden;
-  font-family: sans-serif;
+  height: 100vh;
 }
 
-.carousel {
-  position: relative;
+.cover-image {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  max-width: 512px; /* adjust as needed */
+  height: auto;
+}
+
+.cover-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel-slide {
+  display: flex;
+  justify-content: center;
 }
 
 .carousel-slide {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 1024px;
-  height: 1024px;
+  width: 512px;
+  height: 512px;
   background-size: cover;
   background-position: center;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateX(100%);
+  opacity: 0.1;
   transition: transform 0.8s ease, opacity 0.8s ease;
-  opacity: 0;
-  z-index: 0;
+  z-index: 1;
 }
 
 .carousel-slide.active {
   transform: translate(-50%, -50%) translateX(0);
   opacity: 1;
-  z-index: 3;
-}
-
-.carousel-slide.prev {
-  transform: translate(-50%, -50%) translateX(-110%);
-  opacity: 0.1;
   z-index: 2;
 }
 
-.carousel-slide.next {
-  transform: translate(-50%, -50%) translateX(110%);
+.carousel-slide.exit-left {
+  transform: translate(-50%, -50%) translateX(-100%);
   opacity: 0.1;
-  z-index: 2;
 }
 
-.carousel-slide .links {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
+@media (max-width: 512px) {
+  .carousel-slide {
+    width: 90vw;
+    height: 90vw;
+  }
+}
+
+.music-links {
   display: flex;
-  gap: 20px;
+  justify-content: center;   /* center horizontally */
+  gap: 20px;                 /* spacing between icons */
+  margin-top: 20px;          /* space above the icons */
 }
 
-.carousel-slide .links img {
-  width: 40px;
+.music-links img {
+  width: 40px;               /* or whatever size you want */
   height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.music-links img:hover {
+  transform: scale(1.1);     /* slight zoom on hover */
+}
+
+.chevron {
+  background: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  appearance: none;     	/* for Safari */
+  -webkit-appearance: none; /* for iOS Safari */
+}
+
+.chevron:hover,
+.chevron:focus {
+  background: none;
 }
 
 .chevron {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   width: 50px;
   height: 50px;
-  background: none;
   border: none;
-  z-index: 10;
   cursor: pointer;
+  z-index: 10;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chevron img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
 .chevron.left {
-  left: 20px;
-  transform: translateY(-50%) rotate(180deg);
+  left: calc(50% - 312px); /* image is 512px wide + padding */
+  transform: rotate(180deg) translateY(50%);
 }
 
 .chevron.right {
-  right: 20px;
+  right: calc(50% - 312px);
 }
