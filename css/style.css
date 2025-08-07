@@ -6,7 +6,7 @@ body {
 
 .cover-image {
   width: 100%;
-  max-width: 512px; /* adjust as needed */
+  max-width: 512px;          /* adjust as needed */
   height: auto;
 }
 
@@ -15,6 +15,7 @@ body {
   flex-direction: column;
   align-items: center;
   position: relative;
+  padding-bottom: 100px;     /* space for icons below image */
 }
 
 .carousel-slide {
@@ -50,53 +51,6 @@ body {
   opacity: 0;
 }
 
-@media (max-width: 512px) {
-  .carousel-slide {
-    width: 90vw;
-    height: 90vw;
-  }
-}
-
-.music-links {
-  margin-top: 0px;          /* space above the icons */
-}
-
-.music-links {
-  position: absolute;
-  bottom: -60px; /* adjust as needed */
-  justify-content: center;   /* center horizontally */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 15px;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  opacity: 0;
-  pointer-events: none;
-/*  margin-top: 0px;          /* space above the icons */
-}
-
-.music-links img {
-  width: 80px;               /* or whatever size you want */
-  height: auto;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.music-links img:hover {
-  transform: scale(1.1);     /* slight zoom on hover */
-}
-
-.carousel-slide .music-links {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 40px;
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  opacity: 0;
-}
-
 .carousel-slide.active .music-links {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
@@ -106,6 +60,38 @@ body {
 .carousel-slide.exit-left .music-links {
   opacity: 0;
   transform: translateX(-50%) translateY(40px);
+}
+
+@media (max-width: 512px) {
+  .carousel-slide {
+    width: 90vw;
+    height: 90vw;
+  }
+}
+
+.music-links {
+  position: absolute;
+  bottom: -60px; 				/* adjust as needed */
+  justify-content: center;      /* center horizontally */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 15px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+  margin-top: 0px;              /* space above the icons */
+}
+
+.music-links img {
+  width: 80px;                  /* or whatever size you want */
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.music-links img:hover {
+  transform: scale(1.1);        /* slight zoom on hover */
 }
 
 .chevron {
@@ -144,10 +130,10 @@ body {
 }
 
 .chevron.left {
-  left: calc(50% - 312px); /* image is 512px wide + padding */
+  left: calc(50% - 322px); /* image is 512px wide + padding */
   transform: rotate(180deg) translateY(50%);
 }
 
 .chevron.right {
-  right: calc(50% - 312px);
+  right: calc(50% - 322px);
 }
