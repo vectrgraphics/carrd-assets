@@ -30,7 +30,7 @@ body {
   background-size: cover;
   background-position: center;
   transform: translate(-50%, -50%) translateX(100%);
-  opacity: 0;
+  opacity: 0.1;
   transition: transform 0.8s ease, opacity 0.8s ease;
   z-index: 1;
 }
@@ -43,7 +43,7 @@ body {
 
 .carousel-slide.exit-left {
   transform: translate(-50%, -50%) translateX(-100%);
-  opacity: 0;
+  opacity: 0.1;
 }
 
 @media (max-width: 512px) {
@@ -76,7 +76,7 @@ body {
   padding: 0;
   margin: 0;
   outline: none;
-  appearance: none;       /* for Safari */
+  appearance: none;     	/* for Safari */
   -webkit-appearance: none; /* for iOS Safari */
 }
 
@@ -107,10 +107,10 @@ body {
 }
 
 .chevron.left {
-  left: calc(50% - 352px); /* image is 512px wide + padding */
+  left: calc(50% - 312px); /* image is 512px wide + padding */
   transform: rotate(180deg) translateY(50%);
 }
 
 .chevron.right {
-  right: calc(50% - 152px);
+  right: calc(50% - 312px);
 }
