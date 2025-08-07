@@ -4,12 +4,6 @@ body {
   height: 100vh;
 }
 
-/* cover-image { */
-/*   width: 100%; */
-/*   max-width: 512px;  */         /* adjust as needed */
-/*   height: auto; */
-/* } */
-
 .cover-image {
   width: 100%;
   height: 100%;
@@ -17,15 +11,6 @@ body {
   border-radius: 5px;
   display: block;
 }
-
-
-/* .cover-block { */
-/*   display: flex; */
-/*   flex-direction: column; */
-/*   align-items: center; */
-/*   position: relative; */
-/*   padding-bottom: 100px; */     /* space for icons below image */
-/* }  */
 
 .cover-block {
   width: 100%;
@@ -110,7 +95,7 @@ carousel-slide {
   gap: 20px;
   opacity: 1;
   transition: opacity 0.5s ease;
-  /*  pointer-events: none; */
+  pointer-events: none; 
 }
 
 .music-links img {
@@ -129,8 +114,8 @@ carousel-slide {
   padding: 0;
   margin: 0;
   outline: none;
-  appearance: none;     	 /* for Safari */
-  -webkit-appearance: none;  /* for iOS Safari */
+  appearance: none;     	    /* for Safari */
+  -webkit-appearance: none;     /* for iOS Safari */
 }
 
 .chevron:hover,
@@ -160,7 +145,7 @@ carousel-slide {
 }
 
 .chevron.left {
-  left: calc(50% - 322px); /* image is 512px wide + padding */
+  left: calc(50% - 322px);     /* image is 512px wide + padding */
   transform: rotate(180deg) translateY(50%);
 }
 
