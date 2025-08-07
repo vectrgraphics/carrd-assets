@@ -1,7 +1,7 @@
   let currentIndex = 0;
   const slides = document.querySelectorAll('.carousel-slide');
-  const nextBtn = document.querySelector('.arrow.right');
-  const prevBtn = document.querySelector('.arrow.left');
+  const nextBtn = document.querySelector('.chevron.right');
+  const prevBtn = document.querySelector('.chevron.left');
 
   function showSlide(newIndex) {
     if (newIndex === currentIndex) return;
@@ -18,7 +18,7 @@
     setTimeout(() => {
       currentSlide.classList.remove('exit-left');
       currentIndex = newIndex;
-    }, 800);
+    }, 512);
   }
 
   nextBtn.addEventListener('click', () => {
