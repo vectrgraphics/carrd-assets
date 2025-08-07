@@ -70,7 +70,7 @@ carousel-slide {
   transition: transform 0.8s ease, opacity 0.8s ease;
   z-index: 1;
   border-radius: 5px;
-  /* overflow: hidden; */
+  overflow: hidden;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
 }
 
