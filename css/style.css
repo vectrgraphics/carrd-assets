@@ -104,14 +104,13 @@ body {
   max-height: 100%;
   object-fit: contain;
   display: block;
-  filter: invert(1) brightness(2);
 }
 
 .chevron.left {
-  left: calc(50% - 272px); /* image is 512px wide + padding */
+  left: calc(50% - 252px); /* image is 512px wide + padding */
   transform: rotate(180deg) translateY(50%);
 }
 
 .chevron.right {
-  right: calc(50% - 272px);
+  right: calc(50% - 252px);
 }
