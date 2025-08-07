@@ -74,8 +74,8 @@ body {
 .chevron {
   position: absolute;
   top: 50%;
-  width: 50px;
-  height: 50px;
+  width: 530px;
+  height: 800px;
   border: none;
   cursor: pointer;
   z-index: 10;
@@ -83,10 +83,10 @@ body {
 }
 
 .chevron.left {
-  left: calc(50% - 272px); /* image is 512px wide + padding */
+  left: calc(40% - 272px); /* image is 512px wide + padding */
   transform: rotate(180deg) translateY(50%);
 }
 
 .chevron.right {
-  right: calc(50% - 272px);
+  right: calc(40% - 272px);
 }
