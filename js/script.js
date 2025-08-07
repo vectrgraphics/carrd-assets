@@ -1,43 +1,32 @@
-let currentIndex = 0;
-const slides = document.querySelectorAll('.carousel-slide');
-const nextBtn = document.querySelector('.chevron.right');
-const prevBtn = document.querySelector('.chevron.left');
+  let currentIndex = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const nextBtn = document.querySelector('.arrow.right');
+  const prevBtn = document.querySelector('.arrow.left');
 
-function showSlide(newIndex) {
-  if (newIndex === currentIndex) return;
+  function showSlide(newIndex) {
+    if (newIndex === currentIndex) return;
 
-  const currentSlide = slides[currentIndex];
-  const incomingSlide = slides[newIndex];
+    const currentSlide = slides[currentIndex];
+    const nextSlide = slides[newIndex];
 
-  // Remove all transition classes from incoming slide
-  incomingSlide.classList.remove('exit-left', 'exit-right');
+    currentSlide.classList.remove('active');
+    currentSlide.classList.add('exit-left');
 
-  // Activate the incoming slide
-  incomingSlide.classList.add('active');
+    nextSlide.classList.add('active');
+    nextSlide.classList.remove('exit-left');
 
-  // Animate current slide out in the correct direction
-  if (newIndex > currentIndex || (currentIndex === slides.length - 1 && newIndex === 0)) {
-    currentSlide.classList.add('exit-left'); // Going forward
-  } else {
-    currentSlide.classList.add('exit-right'); // Going backward
+    setTimeout(() => {
+      currentSlide.classList.remove('exit-left');
+      currentIndex = newIndex;
+    }, 800);
   }
 
-  // Remove active from current
-  currentSlide.classList.remove('active');
+  nextBtn.addEventListener('click', () => {
+    let newIndex = (currentIndex + 1) % slides.length;
+    showSlide(newIndex);
+  });
 
-  // After animation, clean up
-  setTimeout(() => {
-    currentSlide.classList.remove('exit-left', 'exit-right');
-    currentIndex = newIndex;
-  }, 1000); // match your CSS transition duration
-}
-
-nextBtn.addEventListener('click', () => {
-  let newIndex = (currentIndex + 1) % slides.length;
-  showSlide(newIndex);
-});
-
-prevBtn.addEventListener('click', () => {
-  let newIndex = (currentIndex - 1 + slides.length) % slides.length;
-  showSlide(newIndex);
-});
+  prevBtn.addEventListener('click', () => {
+    let newIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(newIndex);
+  });
