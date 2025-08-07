@@ -1,0 +1,169 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* cover-image { */
+/*   width: 100%; */
+/*   max-width: 512px;  */         /* adjust as needed */
+/*   height: auto; */
+/* } */
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  display: block;
+}
+
+
+/* .cover-block { */
+/*   display: flex; */
+/*   flex-direction: column; */
+/*   align-items: center; */
+/*   position: relative; */
+/*   padding-bottom: 100px; */     /* space for icons below image */
+/* }  */
+
+.cover-block {
+  width: 100%;
+  height: 512px;             
+  overflow: visible;
+}
+
+.carousel-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 512px; 
+  transform: translate(-50%, -50%);
+  text-align: center;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+  z-index: 1;
+  opacity: 0;
+  overflow: visible;               /* ensures icons aren’t masked */
+}
+
+.carousel-item.active {
+  opacity: 1;
+  z-index: 2;
+  transform: translate(-50%, -50%) translateX(0);
+}
+
+carousel-slide {
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 512px;
+  height: 512px;
+  background-size: cover;
+  background-position: center;
+  transform: translate(-50%, -50%) translateX(100%);
+  opacity: 0;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+  z-index: 1;
+  border-radius: 5px;
+  /* overflow: hidden; */
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-slide.active {
+  transform: translate(-50%, -50%) translateX(0);
+  opacity: 1;
+  z-index: 2;
+}
+
+.carousel-slide.exit-left {
+  transform: translate(-50%, -50%) translateX(-100%);
+  opacity: 0;
+}
+
+.carousel-slide.active .music-links {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.carousel-slide.exit-left .music-links {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+@media (max-width: 512px) {
+  .carousel-slide {
+    width: 90vw;
+    height: 90vw;
+  }
+}
+
+.music-links {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  /*  pointer-events: none; */
+}
+
+.music-links img {
+  width: 80px;                  /* or whatever size you want */
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.music-links img:hover {
+  transform: scale(1.1);        /* slight zoom on hover */
+}
+
+.chevron {
+  background: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  appearance: none;     	 /* for Safari */
+  -webkit-appearance: none;  /* for iOS Safari */
+}
+
+.chevron:hover,
+.chevron:focus {
+  background: none;
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chevron img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.chevron.left {
+  left: calc(50% - 322px); /* image is 512px wide + padding */
+  transform: rotate(180deg) translateY(50%);
+}
+
+.chevron.right {
+  right: calc(50% - 322px);
+}
