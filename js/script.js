@@ -1,47 +1,28 @@
-document.addEventListener('DOMContentLoaded', () => {
-  let currentIndex = 0;
-  const items = document.querySelectorAll('.carousel-item');
-  const nextBtn = document.querySelector('.chevron.right'); // go forward
-  const prevBtn = document.querySelector('.chevron.left');  // go backward
-
-  // init
-  items.forEach((it, i) => it.classList.toggle('active', i === 0));
-
-  function showSlide(newIndex, fromSide) {
-    if (newIndex === currentIndex) return;
-
-    const current = items[currentIndex];
-    const next = items[newIndex];
-
-    // Hide current immediately (no slide-out)
-    current.classList.remove('active');
-
-    // Prep next off-screen on chosen side, then animate in
-    next.classList.remove('active', 'enter-left', 'enter-right');
-    next.classList.add(fromSide === 'left' ? 'enter-left' : 'enter-right');
-
-    // Force reflow so the starting transform is registered
-    void next.offsetWidth;
-
-    next.classList.add('active');                 // moves to center + fades in
-    next.classList.remove('enter-left', 'enter-right');
-
-    currentIndex = newIndex;
-  }
-
-  // Right chevron: incoming from the RIGHT → moves right→left
-  nextBtn?.addEventListener('click', () => {
-    const newIndex = (currentIndex + 1) % items.length;
-    showSlide(newIndex, 'right');
-  });
-
-  // Left chevron: incoming from the LEFT → moves left→right
-  prevBtn?.addEventListener('click', () => {
-    const newIndex = (currentIndex - 1 + items.length) % items.length;
-    showSlide(newIndex, 'left');
-  });
+// map chevrons to the side the NEXT slide comes from
+nextBtn?.addEventListener('click', () => {
+  const i = (currentIndex + 1) % items.length;
+  showSlide(i, 'right');        // right chevron => enter from RIGHT
+});
+prevBtn?.addEventListener('click', () => {
+  const i = (currentIndex - 1 + items.length) % items.length;
+  showSlide(i, 'left');         // left chevron => enter from LEFT
 });
 
+function showSlide(newIndex, fromSide) {
+  if (newIndex === currentIndex) return;
+  const current = items[currentIndex];
+  const next = items[newIndex];
+
+  current.classList.remove('active'); // no slide-out
+  next.classList.remove('active','enter-left','enter-right');
+  next.classList.add(fromSide === 'left' ? 'enter-left' : 'enter-right');
+
+  void next.offsetWidth;              // <-- critical reflow
+
+  next.classList.add('active');       // slide/fade to center
+  next.classList.remove('enter-left','enter-right');
+  currentIndex = newIndex;
+}
 
 
 let touchStartX = 0;
