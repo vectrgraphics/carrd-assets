@@ -1,6 +1,5 @@
   let currentIndex = 0;
-  const slides = document.querySelectorAll('.carousel-item');
-    
+  const slides = document.querySelectorAll('.carousel-slide');    
   const nextBtn = document.querySelector('.chevron.right');
   const prevBtn = document.querySelector('.chevron.left');
 
