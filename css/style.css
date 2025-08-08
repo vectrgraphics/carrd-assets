@@ -113,31 +113,52 @@ body {
   right: calc(50% - 322px);
 }
 
-/* Mobile sizing */
+/* --- Mobile layout fix --- */
 @media (max-width: 600px) {
-  .carousel-slide {
-    display: block; 
+  /* Let the card flow; center horizontally */
+  .carousel-item {
+    position: relative;
+    top: auto;
+    left: 50%;
+    width: 88vw;                /* tweak 88–95vw to taste */
+    transform: translateX(-50%);/* only center horizontally */
+    margin: 16px 0 28px;        /* space from header & links */
+    opacity: 0;                 /* keep fade logic intact */
   }
+  .carousel-item.active {
+    opacity: 1;
+    transform: translateX(-50%);/* no vertical translate on mobile */
+  }
+  /* Keep exit/enter animations working left/right */
+  .carousel-item.exit-left  { transform: translateX(-150%); }
+  .carousel-item.exit-right { transform: translateX(50%);   }
+  .carousel-item.enter-left  { transform: translateX(-150%); }
+  .carousel-item.enter-right { transform: translateX(50%);   }
+
+  /* Square art fits the screen width */
+  .carousel-slide,
   .cover-block {
-    width: 95vw;          /* fits nicely with some side padding */
-    height: 95vw;         /* keep it square */
+    width: 100%;
+    height: 88vw;               /* same as width to keep square */
   }
 
-  /* Smaller icons under the cover */
-  .music-links img {
-    width: 56px;
-  }
-
-  /* Reposition chevrons relative to new width */
+  /* Chevrons anchored to the card, not the viewport */
   .chevron {
     width: 40px;
     height: 40px;
+    top: 50%;
+    transform: translateY(-50%);
   }
   .chevron.left {
-    left: calc(50% - (95vw / 2) - 24px);   /* 24px = little gutter outside the art */
+    left: -18px;                /* just outside the art */
     transform: rotate(180deg) translateY(50%);
   }
   .chevron.right {
-    right: calc(50% - (95vw / 2) - 24px);
+    right: -18px;
+  }
+
+  /* Slightly smaller service icons */
+  .music-links img {
+    width: 56px;
   }
 }
