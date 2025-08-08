@@ -1,43 +1,48 @@
+document.addEventListener('DOMContentLoaded', () => {
   let currentIndex = 0;
-  const slides = document.querySelectorAll('.carousel-slide');    
+  const items = document.querySelectorAll('.carousel-item');
   const nextBtn = document.querySelector('.chevron.right');
   const prevBtn = document.querySelector('.chevron.left');
 
-  function showSlide(newIndex) {
+  // init
+  items.forEach((it, i) => it.classList.toggle('active', i === 0));
+
+  function showSlide(newIndex, dir) {
     if (newIndex === currentIndex) return;
 
-    const currentSlide = slides[currentIndex];
-    const nextSlide = slides[newIndex];
+    const current = items[currentIndex];
+    const next = items[newIndex];
 
-    currentSlide.classList.remove('active');
-    currentSlide.classList.add('exit-left');
+    // Prep next at the correct side
+    next.classList.remove('active','exit-left','exit-right','enter-left','enter-right');
+    next.classList.add(dir === 'next' ? 'enter-right' : 'enter-left');
 
-    nextSlide.classList.add('active');
-    nextSlide.classList.remove('exit-left');
+    // Trigger a reflow so the browser registers the starting position
+    void next.offsetWidth;
 
-    setTimeout(() => {
-      currentSlide.classList.remove('exit-left');
+    // Animate current out & next in
+    current.classList.remove('enter-left','enter-right');
+    current.classList.add(dir === 'next' ? 'exit-left' : 'exit-right');
+    next.classList.add('active');
+
+    // Cleanup after transition
+    const done = () => {
+      current.classList.remove('exit-left','exit-right','active');
+      next.classList.remove('enter-left','enter-right');
+      current.removeEventListener('transitionend', done);
       currentIndex = newIndex;
-    }, 512);
+    };
+    current.addEventListener('transitionend', done, { once: true });
   }
 
-  nextBtn.addEventListener('click', () => {
-    let newIndex = (currentIndex + 1) % slides.length;
-    showSlide(newIndex);
+  nextBtn?.addEventListener('click', () => {
+    showSlide((currentIndex + 1) % items.length, 'next');
+  });
+  prevBtn?.addEventListener('click', () => {
+    showSlide((currentIndex - 1 + items.length) % items.length, 'prev');
   });
 
-  prevBtn.addEventListener('click', () => {
-    let newIndex = (currentIndex - 1 + slides.length) % slides.length;
-    showSlide(newIndex);
-  });
-
-
-
-slides.forEach((slide, i) => {
-  slide.classList.remove('active');
-  if (i === currentIndex) {
-    slide.classList.add('active');
-  }
+  // (Optional) keep your swipe handlers; they can call the same showSlide
 });
 
 
