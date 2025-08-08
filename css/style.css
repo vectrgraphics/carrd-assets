@@ -4,30 +4,27 @@ body {
   height: 100vh;
 }
 
-/* Base (off but centered) */
+/* Base card: centered, hidden */
 .carousel-item {
   position: absolute;
   top: 50%; left: 50%;
   width: 512px;
   transform: translate(-50%, -50%) translateX(0);
   opacity: 0;
-  transition: transform 0.8s ease, opacity 0.8s ease;
   z-index: 1;
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-/* Visible */
+/* Visible (centered) */
 .carousel-item.active {
   opacity: 1;
   z-index: 2;
+  transform: translate(-50%, -50%) translateX(0);
 }
 
-/* Animate current OUT */
-.carousel-item.exit-left { transform: translate(-50%, -50%) translateX(-100%); opacity: 0; }
-.carousel-item.exit-right { transform: translate(-50%, -50%) translateX(100%); opacity: 0; }
-
-/* Set where the NEXT slide starts (before it fades/moves IN) */
-.carousel-item.enter-left { transform: translate(-50%, -50%) translateX(-100%); }
-.carousel-item.enter-right { transform: translate(-50%, -50%) translateX(100%); }
+/* Where the NEXT slide starts (off-screen + transparent) */
+.carousel-item.enter-left  { transform: translate(-50%, -50%) translateX(-120%); opacity: 0; }
+.carousel-item.enter-right { transform: translate(-50%, -50%) translateX(120%);  opacity: 0; }
 
 .carousel-slide {
   display: block; 

@@ -13,36 +13,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const current = items[currentIndex];
     const next = items[newIndex];
 
-    // Prep next at the correct side
-    next.classList.remove('active','exit-left','exit-right','enter-left','enter-right');
+    // Immediately hide current (no slide-out)
+    current.classList.remove('active');
+
+    // Prep next off-screen on the chosen side
+    next.classList.remove('active', 'enter-left', 'enter-right');
     next.classList.add(dir === 'next' ? 'enter-right' : 'enter-left');
 
-    // Trigger a reflow so the browser registers the starting position
+    // Force reflow so the browser registers the off-screen start
     void next.offsetWidth;
 
-    // Animate current out & next in
-    current.classList.remove('enter-left','enter-right');
-    current.classList.add(dir === 'next' ? 'exit-left' : 'exit-right');
-    next.classList.add('active');
+    // Animate next into center & fade in
+    next.classList.add('active');                  // goes to center (opacity 1)
+    next.classList.remove('enter-left', 'enter-right');
 
-    // Cleanup after transition
-    const done = () => {
-      current.classList.remove('exit-left','exit-right','active');
-      next.classList.remove('enter-left','enter-right');
-      current.removeEventListener('transitionend', done);
-      currentIndex = newIndex;
-    };
-    current.addEventListener('transitionend', done, { once: true });
+    currentIndex = newIndex;                       // update immediately
   }
 
   nextBtn?.addEventListener('click', () => {
     showSlide((currentIndex + 1) % items.length, 'next');
   });
+
   prevBtn?.addEventListener('click', () => {
     showSlide((currentIndex - 1 + items.length) % items.length, 'prev');
   });
-
-  // (Optional) keep your swipe handlers; they can call the same showSlide
 });
 
 
