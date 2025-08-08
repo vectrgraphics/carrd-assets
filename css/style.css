@@ -112,3 +112,32 @@ body {
 .chevron.right {
   right: calc(50% - 322px);
 }
+
+/* Mobile sizing */
+@media (max-width: 600px) {
+  .carousel-slide {
+    display: block; 
+  }
+  .cover-block {
+    width: 95vw;          /* fits nicely with some side padding */
+    height: 95vw;         /* keep it square */
+  }
+
+  /* Smaller icons under the cover */
+  .music-links img {
+    width: 56px;
+  }
+
+  /* Reposition chevrons relative to new width */
+  .chevron {
+    width: 40px;
+    height: 40px;
+  }
+  .chevron.left {
+    left: calc(50% - (95vw / 2) - 24px);   /* 24px = little gutter outside the art */
+    transform: rotate(180deg) translateY(50%);
+  }
+  .chevron.right {
+    right: calc(50% - (95vw / 2) - 24px);
+  }
+}
