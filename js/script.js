@@ -1,41 +1,44 @@
 document.addEventListener('DOMContentLoaded', () => {
   let currentIndex = 0;
   const items = document.querySelectorAll('.carousel-item');
-  const nextBtn = document.querySelector('.chevron.right');
-  const prevBtn = document.querySelector('.chevron.left');
+  const nextBtn = document.querySelector('.chevron.right'); // go forward
+  const prevBtn = document.querySelector('.chevron.left');  // go backward
 
   // init
   items.forEach((it, i) => it.classList.toggle('active', i === 0));
 
-  function showSlide(newIndex, dir) {
+  function showSlide(newIndex, fromSide) {
     if (newIndex === currentIndex) return;
 
     const current = items[currentIndex];
     const next = items[newIndex];
 
-    // Immediately hide current (no slide-out)
+    // Hide current immediately (no slide-out)
     current.classList.remove('active');
 
-    // Prep next off-screen on the chosen side
+    // Prep next off-screen on chosen side, then animate in
     next.classList.remove('active', 'enter-left', 'enter-right');
-    next.classList.add(dir === 'next' ? 'enter-right' : 'enter-left');
+    next.classList.add(fromSide === 'left' ? 'enter-left' : 'enter-right');
 
-    // Force reflow so the browser registers the off-screen start
+    // Force reflow so the starting transform is registered
     void next.offsetWidth;
 
-    // Animate next into center & fade in
-    next.classList.add('active');                  // goes to center (opacity 1)
+    next.classList.add('active');                 // moves to center + fades in
     next.classList.remove('enter-left', 'enter-right');
 
-    currentIndex = newIndex;                       // update immediately
+    currentIndex = newIndex;
   }
 
+  // Right chevron: incoming from the RIGHT → moves right→left
   nextBtn?.addEventListener('click', () => {
-    showSlide((currentIndex + 1) % items.length, 'next');
+    const newIndex = (currentIndex + 1) % items.length;
+    showSlide(newIndex, 'right');
   });
 
+  // Left chevron: incoming from the LEFT → moves left→right
   prevBtn?.addEventListener('click', () => {
-    showSlide((currentIndex - 1 + items.length) % items.length, 'prev');
+    const newIndex = (currentIndex - 1 + items.length) % items.length;
+    showSlide(newIndex, 'left');
   });
 });
 
