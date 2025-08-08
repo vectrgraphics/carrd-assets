@@ -27,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     next.classList.add('active');
     next.classList.remove('enter-left','enter-right');
 
+	next.classList.add('enter-right');   // or enter-left
+	void next.offsetWidth;               // reflow (critical)
+	next.classList.add('active');
+	next.classList.remove('enter-right','enter-left');
+
     currentIndex = newIndex;
   }
 
@@ -39,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showSlide(i, 'left');
   });
 });
-
 
 let touchStartX = 0;
 let touchEndX = 0;
