@@ -1,29 +1,21 @@
-/* Allow page to scroll so links aren't cut off */
 body{ margin:0; overflow-y:auto; min-height:100vh; }
 
-/* Card centered; hidden by default */
 .carousel-item {
   position: absolute;
   top: 50%; left: 50%;
-  width: 512px;
-  transform: translate(-50%, -50%) translateX(0);
+  transform: translate(-50%, -50%);
   opacity: 0;
-  z-index: 1;
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  transition: transform .6s ease, opacity .6s ease;
 }
 
-/* Active = centered & visible */
 .carousel-item.active {
-  opacity: 1;
+  transform: translate(-50%, -50%);  
   z-index: 2;
-  transform: translate(-50%, -50%) translateX(0);
 }
 
-/* Incoming positions (off-screen, transparent) */
-.carousel-item.enter-left  { transform: translate(-50%, -50%) translateX(-120%); opacity: 0; }
-.carousel-item.enter-right { transform: translate(-50%, -50%) translateX(120%);  opacity: 0;  }
+.carousel-item.enter-left  { transform: translate(-150%, -50%); opacity: 0; } 
+.carousel-item.enter-right { transform: translate(  50%, -50%); opacity: 0; } 
 
-/* Art block stays 512×512 on desktop */
 .carousel-slide,
 .cover-block {
   width: 512px;
@@ -38,10 +30,8 @@ body{ margin:0; overflow-y:auto; min-height:100vh; }
   border-radius: 5px;
 }
 
-/* Make sure the selector has the dot */
 .carousel-slide { display: block; }
 
-/* Music links live below, clickable */
 .music-links {
   margin-top: 20px;
   display: flex;
@@ -56,9 +46,8 @@ body{ margin:0; overflow-y:auto; min-height:100vh; }
   padding: 0;
   margin: 0;
   outline: none;
-  appearance: none;     	    /* for Safari */
-  -webkit-appearance: none;     /* for iOS Safari */
-}
+  appearance: none;     	    
+  -webkit-appearance: none;     
 
 .chevron:hover,
 .chevron:focus {
@@ -87,30 +76,20 @@ body{ margin:0; overflow-y:auto; min-height:100vh; }
 }
 
 .chevron.left {
-  left: calc(50% - 322px);     /* image is 512px wide + padding */
-  transform: rotate(180deg) translateY(50%);
+  left: calc(50% - 322px);     
 }
 
 .chevron.right {
   right: calc(50% - 322px);
 }
 
-/* — Optional: responsive shrink on phones — */
 @media (max-width: 600px) {
-  .carousel-item {
-    position: relative;
-    top: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 88vw;
-    margin: 16px 0 28px;
-  }
+  .carousel { touch-action: pan-y; }
+  .carousel-item { position: relative; left: 50%; transform: translateX(-50%); }
   .carousel-item.active { transform: translateX(-50%); }
   .carousel-item.enter-left  { transform: translateX(-150%); }
-  .carousel-item.enter-right { transform: translateX(150%); }
-
+  .carousel-item.enter-right { transform: translateX( 150%); }
   .carousel-slide, .cover-block { width: 100%; height: 88vw; }
-
   .chevron { width: 40px; height: 40px; top: 50%; transform: translateY(-50%); }
   .chevron.left  { left: -18px; transform: rotate(180deg) translateY(50%); }
   .chevron.right { right: -18px; }
