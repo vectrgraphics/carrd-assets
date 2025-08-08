@@ -1,28 +1,44 @@
-// map chevrons to the side the NEXT slide comes from
-nextBtn?.addEventListener('click', () => {
-  const i = (currentIndex + 1) % items.length;
-  showSlide(i, 'right');        // right chevron => enter from RIGHT
+document.addEventListener('DOMContentLoaded', () => {
+  const items   = Array.from(document.querySelectorAll('.carousel-item'));
+  const nextBtn = document.querySelector('.chevron.right');
+  const prevBtn = document.querySelector('.chevron.left');
+
+  if (!items.length || !nextBtn || !prevBtn) {
+    console.warn('Carousel wiring issue:', { items: items.length, nextBtn, prevBtn });
+    return;
+  }
+
+  let currentIndex = items.findIndex(el => el.classList.contains('active'));
+  if (currentIndex < 0) currentIndex = 0;
+  items.forEach((el, i) => el.classList.toggle('active', i === currentIndex));
+
+  function showSlide(newIndex, fromSide) {
+    if (newIndex === currentIndex) return;
+
+    const current = items[currentIndex];
+    const next = items[newIndex];
+
+    current.classList.remove('active','enter-left','enter-right');
+    next.classList.remove('active','enter-left','enter-right');
+    next.classList.add(fromSide === 'left' ? 'enter-left' : 'enter-right');
+
+    void next.offsetWidth; // reflow
+
+    next.classList.add('active');
+    next.classList.remove('enter-left','enter-right');
+
+    currentIndex = newIndex;
+  }
+
+  nextBtn.addEventListener('click', () => {
+    const i = (currentIndex + 1) % items.length;
+    showSlide(i, 'right');
+  });
+  prevBtn.addEventListener('click', () => {
+    const i = (currentIndex - 1 + items.length) % items.length;
+    showSlide(i, 'left');
+  });
 });
-prevBtn?.addEventListener('click', () => {
-  const i = (currentIndex - 1 + items.length) % items.length;
-  showSlide(i, 'left');         // left chevron => enter from LEFT
-});
-
-function showSlide(newIndex, fromSide) {
-  if (newIndex === currentIndex) return;
-  const current = items[currentIndex];
-  const next = items[newIndex];
-
-  current.classList.remove('active'); // no slide-out
-  next.classList.remove('active','enter-left','enter-right');
-  next.classList.add(fromSide === 'left' ? 'enter-left' : 'enter-right');
-
-  void next.offsetWidth;              // <-- critical reflow
-
-  next.classList.add('active');       // slide/fade to center
-  next.classList.remove('enter-left','enter-right');
-  currentIndex = newIndex;
-}
 
 
 let touchStartX = 0;
