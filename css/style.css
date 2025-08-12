@@ -8,9 +8,9 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
 /* Slides default: hidden & centered (so transitions are consistent) */
 .carousel-item {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 0; left: 50%;
   width: 512px;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   opacity: 0;
   pointer-events: none;
   transition: transform var(--slide-ms) ease, opacity var(--slide-ms) ease;
@@ -18,18 +18,18 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
 
 /* States */
 .carousel-item.active {                 /* center / active */
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   opacity: 1;
   pointer-events: auto;
   z-index: 3;
 }
 .carousel-item.left {                   /* previous (dim) at -100% */
-  transform: translate(-150%, -50%);
+  transform: translate(-150%, 0);
   opacity: 0.1;
   z-index: 2;
 }
 .carousel-item.right {                  /* next (dim) at +100% */
-  transform: translate(50%, -50%);
+  transform: translate(50%, 0);
   opacity: 0.1;
   z-index: 2;
 }
