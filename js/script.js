@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.music-links .icon').forEach(a => {
       const img = a.querySelector('img');
       const src = (img?.getAttribute('src') || '').toLowerCase();
-      if (src.includes('apple'))      a.classList.add('icon--apple');
+           if (src.includes('apple'))   a.classList.add('icon--apple');
       else if (src.includes('spotify')) a.classList.add('icon--spotify');
       else if (src.includes('youtube')) a.classList.add('icon--yt');
     });

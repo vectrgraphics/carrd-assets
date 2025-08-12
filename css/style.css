@@ -53,7 +53,7 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   height: 100%;
   object-fit: contain;     /* shows 100% of the artwork */
   display: block;
-  border-radius: 5px;      /* remove if you don’t want rounded corners */
+  border-radius: 7px;      /* remove if you don’t want rounded corners */
 }
 
 /* mobile keeps the square stage; image still ‘contain’s inside it */
@@ -72,8 +72,8 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
 /* base icon “button” */
 .icon {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   display: inline-block;
   pointer-events: auto; /* still gated by the slide's pointer-events */
 }
