@@ -61,12 +61,71 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   .carousel-slide, .cover-block { width: 100%; height: 88vw; }
 }
 
-.music-links {
-  margin-top: 28px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
+/* --- SVG icon system (works for every slide) --- */
+
+/* make the row able to host pseudo elements cleanly */
+.music-links { position: relative; gap: 20px; }
+
+/* hide the legacy circle image you placed before the icons on slide 33 */
+.music-links > img[alt="Circle"] { display: none; }
+
+/* base icon “button” */
+.icon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: inline-block;
+  pointer-events: auto; /* still gated by the slide's pointer-events */
 }
+
+/* hide the old PNG/SVG <img> inside the anchor */
+.icon > img { display: none; }
+
+/* white circular underlay, slightly larger than the glyph */
+.icon::before {
+  content: "";
+  position: absolute;
+  inset: -6px;           /* bigger than 44×44 */
+  background: #fff;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* colored glyph drawn from an SVG mask */
+.icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;  /* we set color per service */
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  z-index: 1;
+}
+
+/* service variants — classes will be added by JS */
+.icon--apple  { color: #e63e45; }
+.icon--spotify{ color: #65d46e; }
+.icon--yt     { color: #ea333d; }
+
+.icon--apple::after {
+  -webkit-mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_apple_music.svg");
+  mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_apple_music.svg");
+}
+.icon--spotify::after {
+  -webkit-mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_spotify.svg");
+  mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_spotify.svg");
+}
+.icon--yt::after {
+  -webkit-mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_youtube_music.svg");
+  mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_youtube_music.svg");
+}
+
+/* (optional) subtle hover lift on the active slide */
+.carousel-item.active .icon:hover { transform: translateY(-1px); }
 
 /* Center both arrows on the active slide's vertical middle */
 .chevron{
