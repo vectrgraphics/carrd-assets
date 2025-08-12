@@ -24,18 +24,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-function updateChevronY() {
-  const active = items[index];
-  const stage  = document.querySelector('.carousel');
-  const ar = active.getBoundingClientRect();
-  const sr = stage.getBoundingClientRect();
-  const centerY = ar.top - sr.top + ar.height / 2;
-  stage.style.setProperty('--chev-y', centerY + 'px');
-}
+  function updateChevronY() {
+    const active = items[index];
+    const stage  = document.querySelector('.carousel');
+    const ar = active.getBoundingClientRect();
+    const sr = stage.getBoundingClientRect();
+    const centerY = ar.top - sr.top + ar.height / 2;
+    stage.style.setProperty('--chev-y', centerY + 'px');
+  }
 
-function layout(i) {
-  const prev = (i - 1 + n) % n;
-  const next = (i + 1) % n;
+  function layout(i) {
+    const prev = (i - 1 + n) % n;
+    const next = (i + 1) % n;
 
   items.forEach((el, k) => {
     el.classList.remove('left','right','active','off');
