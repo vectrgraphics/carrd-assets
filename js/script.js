@@ -23,6 +23,36 @@ document.addEventListener('DOMContentLoaded', () => {
       else el.classList.add('off');
     });
   }
+  
+function updateChevronY() {
+  const active = items[index];
+  const stage  = document.querySelector('.carousel');
+  const ar = active.getBoundingClientRect();
+  const sr = stage.getBoundingClientRect();
+  const centerY = ar.top - sr.top + ar.height / 2;
+  stage.style.setProperty('--chev-y', centerY + 'px');
+}
+
+function layout(i) {
+  const prev = (i - 1 + n) % n;
+  const next = (i + 1) % n;
+
+  items.forEach((el, k) => {
+    el.classList.remove('left','right','active','off');
+    if (k === i) el.classList.add('active');
+    else if (k === prev) el.classList.add('left');
+    else if (k === next) el.classList.add('right');
+    else el.classList.add('off');
+  });
+
+  updateChevronY(); // keep arrows vertically centered on the active slide
+}
+
+layout(index);
+updateChevronY();
+
+window.addEventListener('resize', updateChevronY);
+window.addEventListener('load', updateChevronY); // ensures correct after images/fonts
 
   layout(index); // initial placement
 
