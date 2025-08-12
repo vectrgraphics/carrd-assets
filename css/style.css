@@ -8,16 +8,7 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   opacity: 8;
 }
 
-/* Slides default: hidden & centered (so transitions are consistent) */
-.carousel-item {
-  position: absolute;
-  top: 0; left: 50%;
-  width: 512px;
-  transform: translate(-50%, 0);
-  opacity: 0;
-  pointer-events: none;
-  transition: transform var(--slide-ms) ease, opacity var(--slide-ms) ease;
-}
+
 .carousel-item { position: absolute; }  /* already positioned; keeps as anchor */
 
 /* States */
@@ -74,7 +65,7 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   bottom: 10px;                  /* 10px buffer from the cover art */
   transform: translateX(-50%);
   display: flex;
-  gap: 20px;                     /* 20px between icons */
+  gap: 15px;                     /* 20px between icons */
   align-items: center;
   z-index: 5;                    /* above the image */
   pointer-events: auto;          /* stays clickable on active slide */
