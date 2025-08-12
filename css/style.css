@@ -18,6 +18,7 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   pointer-events: none;
   transition: transform var(--slide-ms) ease, opacity var(--slide-ms) ease;
 }
+.carousel-item { position: absolute; }  /* already positioned; keeps as anchor */
 
 /* States */
 .carousel-item.active {                 /* center / active */
@@ -67,7 +68,17 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
 /* --- SVG icon system (works for every slide) --- */
 
 /* make the row able to host pseudo elements cleanly */
-.music-links { position: relative; gap: 20px; }
+.music-links{
+  position: absolute;
+  left: 50%;
+  bottom: 10px;                  /* 10px buffer from the cover art */
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;                     /* 20px between icons */
+  align-items: center;
+  z-index: 5;                    /* above the image */
+  pointer-events: auto;          /* stays clickable on active slide */
+}
 
 /* hide the legacy circle image you placed before the icons on slide 33 */
 .music-links > img[alt="Circle"] { display: none; }
