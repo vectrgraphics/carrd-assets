@@ -38,12 +38,31 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   z-index: 1;
 }
 
-/* Image & links */
-.carousel-slide, .cover-block { width: 512px; height: 512px; }
-.cover-image { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 5px; }
+/* make the image fully visible inside the 512×512 frame */
+.cover-block { 
+  width: 512px; 
+  height: 512px; 
+  display: grid; 
+  place-items: center; 
+  background: #0b0b0b;   /* or transparent/your brand color */
+}
+
+/* was: object-fit: cover; (crops) */
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;     /* shows 100% of the artwork */
+  display: block;
+  border-radius: 5px;      /* remove if you don’t want rounded corners */
+}
+
+/* mobile keeps the square stage; image still ‘contain’s inside it */
+@media (max-width: 600px) {
+  .carousel-slide, .cover-block { width: 100%; height: 88vw; }
+}
 
 .music-links {
-  margin-top: 20px;
+  margin-top: 28px;
   display: flex;
   justify-content: center;
   gap: 20px;
