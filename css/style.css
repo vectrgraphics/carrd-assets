@@ -3,7 +3,10 @@
 body { margin: 0; overflow-y: auto; min-height: 100vh; }
 
 /* Stage */
-.carousel { position: relative; }
+.carousel { 
+  position: relative; 
+  opacity: 8;
+}
 
 /* Slides default: hidden & centered (so transitions are consistent) */
 .carousel-item {
@@ -85,7 +88,7 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
 .icon::before {
   content: "";
   position: absolute;
-  inset: -6px;           /* bigger than 44×44 */
+  inset: -2px;
   background: #fff;
   border-radius: 50%;
   z-index: 0;
