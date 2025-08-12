@@ -1,97 +1,74 @@
-body{ margin:0; overflow-y:auto; min-height:100vh; }
+:root { --slide-ms: 600ms; }
 
+body { margin: 0; overflow-y: auto; min-height: 100vh; }
+
+/* Stage */
+.carousel { position: relative; }
+
+/* Slides default: hidden & centered (so transitions are consistent) */
 .carousel-item {
   position: absolute;
   top: 50%; left: 50%;
   width: 512px;
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: transform .6s ease, opacity .6s ease;
+  pointer-events: none;
+  transition: transform var(--slide-ms) ease, opacity var(--slide-ms) ease;
 }
 
-.carousel-item.active {
+/* States */
+.carousel-item.active {                 /* center / active */
   transform: translate(-50%, -50%);
-  opacity: 1;  
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 3;
+}
+.carousel-item.left {                   /* previous (dim) at -100% */
+  transform: translate(-150%, -50%);
+  opacity: 0.1;
   z-index: 2;
 }
-
-.carousel-item.enter-left  { transform: translate(-150%, -50%); opacity: 0; } 
-.carousel-item.enter-right { transform: translate(  50%, -50%); opacity: 0; } 
-
-.carousel-slide,
-.cover-block {
-  width: 512px;
-  height: 512px;
+.carousel-item.right {                  /* next (dim) at +100% */
+  transform: translate(50%, -50%);
+  opacity: 0.1;
+  z-index: 2;
+}
+.carousel-item.off {                    /* everything else hidden */
+  opacity: 0;
+  z-index: 1;
 }
 
-.cover-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 5px;
-}
-
-.carousel-slide { display: block; }
+/* Image & links */
+.carousel-slide, .cover-block { width: 512px; height: 512px; }
+.cover-image { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 5px; }
 
 .music-links {
   margin-top: 20px;
   display: flex;
   justify-content: center;
   gap: 20px;
-  opacity: 1;
-  pointer-events: auto;
 }
 
-.chevron {
-  background: none;
-  padding: 0;
-  margin: 0;
-  outline: none;
-  appearance: none;     	    
-  -webkit-appearance: none; 
-}    
-
-.chevron:hover,
-.chevron:focus {
-  background: none;
-}
-
+/* Chevrons */
 .chevron {
   position: absolute;
   top: 50%;
-  width: 50px;
-  height: 50px;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
+  width: 50px; height: 50px;
+  border: 0; background: none; cursor: pointer; z-index: 10;
   transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid; place-items: center;
 }
+.chevron img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.chevron.left  { left: calc(50% - 322px); transform: rotate(180deg) translateY(50%); }
+.chevron.right { right: calc(50% - 322px); }
 
-.chevron img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.chevron.left {
-  left: calc(50% - 322px);     
-}
-
-.chevron.right {
-  right: calc(50% - 322px);
-}
-
+/* Mobile */
 @media (max-width: 600px) {
   .carousel { touch-action: pan-y; }
-  .carousel-item { position: relative; left: 50%; transform: translateX(-50%); }
+  .carousel-item { position: relative; top: auto; left: 50%; transform: translateX(-50%); width: 100%; }
   .carousel-item.active { transform: translateX(-50%); }
-  .carousel-item.enter-left  { transform: translateX(-150%); }
-  .carousel-item.enter-right { transform: translateX( 150%); }
+  .carousel-item.left  { transform: translateX(-150%); }
+  .carousel-item.right { transform: translateX(  50%); }
   .carousel-slide, .cover-block { width: 100%; height: 88vw; }
   .chevron { width: 40px; height: 40px; top: 50%; transform: translateY(-50%); }
   .chevron.left  { left: -18px; transform: rotate(180deg) translateY(50%); }

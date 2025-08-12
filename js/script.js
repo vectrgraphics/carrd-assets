@@ -2,75 +2,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const items   = Array.from(document.querySelectorAll('.carousel-item'));
   const nextBtn = document.querySelector('.chevron.right');
   const prevBtn = document.querySelector('.chevron.left');
+  const stage   = document.querySelector('.carousel');
 
-  if (!items.length || !nextBtn || !prevBtn) {
-    console.warn('Carousel wiring issue:', { items: items.length, nextBtn, prevBtn });
-    return;
+  if (!items.length || !nextBtn || !prevBtn) return; // safety
+
+  const n = items.length;
+  let index = items.findIndex(el => el.classList.contains('active'));
+  if (index < 0) index = 0;
+
+  // Apply positions: center (active), neighbors (left/right), others (off)
+  function layout(i) {
+    const prev = (i - 1 + n) % n;
+    const next = (i + 1) % n;
+
+    items.forEach((el, k) => {
+      el.classList.remove('left','right','active','off');
+      if (k === i) el.classList.add('active');
+      else if (k === prev) el.classList.add('left');
+      else if (k === next) el.classList.add('right');
+      else el.classList.add('off');
+    });
   }
 
-  let currentIndex = items.findIndex(el => el.classList.contains('active'));
-  if (currentIndex < 0) currentIndex = 0;
-  items.forEach((el, i) => el.classList.toggle('active', i === currentIndex));
+  layout(index); // initial placement
 
-  function showSlide(newIndex, fromSide) {
-    if (newIndex === currentIndex) return;
+  // Prevent double-press during animation
+  let busy = false;
+  const DURATION = 600; // keep in sync with CSS --slide-ms
 
-    const current = items[currentIndex];
-    const next = items[newIndex];
-
-    current.classList.remove('active','enter-left','enter-right');
-    next.classList.remove('active','enter-left','enter-right');
-    next.classList.add(fromSide === 'left' ? 'enter-left' : 'enter-right');
-
-    void next.offsetWidth; // reflow
-
-    next.classList.add('active');
-    next.classList.remove('enter-left','enter-right');
-
-	next.classList.add('enter-right');   // or enter-left
-	void next.offsetWidth;               // reflow (critical)
-	next.classList.add('active');
-	next.classList.remove('enter-right','enter-left');
-
-    currentIndex = newIndex;
+  function go(dir) {
+    if (busy) return;
+    busy = true;
+    index = (index + (dir > 0 ? 1 : -1) + n) % n;
+    layout(index);
+    setTimeout(() => { busy = false; }, DURATION);
   }
 
-  nextBtn.addEventListener('click', () => {
-    const i = (currentIndex + 1) % items.length;
-    showSlide(i, 'right');
-  });
-  prevBtn.addEventListener('click', () => {
-    const i = (currentIndex - 1 + items.length) % items.length;
-    showSlide(i, 'left');
-  });
+  nextBtn.addEventListener('click', () => go(1));
+  prevBtn.addEventListener('click', () => go(-1));
+
+  // Swipe (mobile)
+  let startX = 0;
+  stage.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; }, { passive: true });
+  stage.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].screenX - startX;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
 });
-
-let touchStartX = 0;
-let touchEndX = 0;
-
-const swipeThreshold = 50; // Minimum px distance to qualify as swipe
-
-const carousel = document.querySelector('.carousel'); // or your outer container
-
-carousel.addEventListener('touchstart', (e) => {
-  touchStartX = e.changedTouches[0].screenX;
-});
-
-carousel.addEventListener('touchend', (e) => {
-  touchEndX = e.changedTouches[0].screenX;
-  handleSwipeGesture();
-});
-
-function handleSwipeGesture() {
-  const deltaX = touchEndX - touchStartX;
-
-  if (Math.abs(deltaX) > swipeThreshold) {
-    if (deltaX > 0) {
-      // Swiped right
-      document.querySelector('.chevron.left').click();
-    } else {
-      // Swiped left
-      document.querySelector('.chevron.right').click();
-    }
-  }
-}
