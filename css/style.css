@@ -2,6 +2,20 @@
 
 body { margin: 0; overflow-y: auto; min-height: 100vh; }
 
+/* Force robust cross-browser centering of slides */
+.carousel-item {
+  left: 0;
+  right: 0;          /* stretch the abspos box horizontally */
+  margin-left: auto; /* center via auto margins */
+  margin-right: auto;
+  transform: none !important;       /* ignore previous translate */
+}
+
+/* Keep the active/prev/next transitions working horizontally */
+.carousel-item.active { transform: none !important; }
+.carousel-item.left   { transform: translateX(-100%) !important; }
+.carousel-item.right  { transform: translateX(100%)  !important; }
+
 /* Stage */
 .carousel { 
   position: relative; 
@@ -56,19 +70,12 @@ body { margin: 0; overflow-y: auto; min-height: 100vh; }
   .carousel-slide, .cover-block { width: 100%; height: 88vw; }
 }
 
-/* --- SVG icon system (works for every slide) --- */
-
-/* make the row able to host pseudo elements cleanly */
-.music-links{
-  position: absolute;
-  left: 50%;
-  bottom: 10px;                  /* 10px buffer from the cover art */
-  transform: translateX(-50%);
+.music-links {
   display: flex;
-  gap: 15px;                     /* 20px between icons */
-  align-items: center;
-  z-index: 5;                    /* above the image */
-  pointer-events: auto;          /* stays clickable on active slide */
+  justify-content: center;
+  gap: 15px;          /* 20px space between icons */
+  margin-top: 10px;   /* 10px space below cover art */
+  position: relative; /* remove any absolute positioning */
 }
 
 /* hide the legacy circle image you placed before the icons on slide 33 */
