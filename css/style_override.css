@@ -1,0 +1,53 @@
+/* style_override.css — load AFTER any older CSS */
+:root { --cover: 512px; }
+
+/* Make the stage a horizontal flex scroller */
+.carousel {
+  display: flex !important;
+  align-items: flex-start !important; /* keep the covers higher on the page */
+  gap: 24px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  visibility: hidden; /* gate until JS sets data-ready="1" */
+}
+.carousel[data-ready="1"] { visibility: visible; }
+
+/* Edge spacers so first/last can be centered */
+.carousel::before,
+.carousel::after {
+  content: "" !important;
+  flex: 0 0 clamp(0px, calc((100% - var(--cover)) / 2), 100vw) !important;
+}
+
+/* Slides are normal flow (not absolute). Kill left/right centering hack. */
+.carousel .carousel-item {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  width: var(--cover) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+.carousel .carousel-item.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.carousel .carousel-item.left,
+.carousel .carousel-item.right {
+  opacity: 0.1 !important; /* faint neighbors per your spec */
+}
+
+/* Cover frame */
+.cover-block {
+  width: var(--cover) !important;
+  height: var(--cover) !important;
+}
+
+/* Brand colors for icons */
+.icon--apple   { color: #e63e45 !important; }
+.icon--spotify { color: #65d46e !important; }
+.icon--yt      { color: #ea333d !important; }
