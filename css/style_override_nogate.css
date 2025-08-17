@@ -1,0 +1,40 @@
+/* style_override_nogate.css — always visible fallback */
+:root { --cover: 512px; }
+
+.carousel {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 24px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  visibility: visible !important; /* no JS gate */
+}
+.carousel::before,
+.carousel::after {
+  content: "" !important;
+  flex: 0 0 clamp(0px, calc((100% - var(--cover)) / 2), 100vw) !important;
+}
+.carousel .carousel-item {
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  margin: 0 !important;
+  flex: 0 0 auto !important;
+  width: var(--cover) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+.carousel .carousel-item.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+.carousel .carousel-item.left,
+.carousel .carousel-item.right {
+  opacity: 0.1 !important;
+}
+.cover-block { width: var(--cover) !important; height: var(--cover) !important; }
+.icon--apple   { color: #e63e45 !important; }
+.icon--spotify { color: #65d46e !important; }
+.icon--yt      { color: #ea333d !important; }
