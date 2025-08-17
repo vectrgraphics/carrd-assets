@@ -1,31 +1,169 @@
-/* Layout & centering */
-  .carousel { position: relative; overflow: hidden; min-height: 80vh; display:flex; align-items:center; justify-content:center; }
-  .carousel-item { 
-    position: absolute; inset: 0; 
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    opacity: 0; transform: translateX(0);
-    transition: transform 500ms cubic-bezier(.2,.7,.2,1), opacity 500ms cubic-bezier(.2,.7,.2,1);
-    pointer-events: none;
-  }
-  .carousel-slide, .cover-block { display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
-  .cover-image { display:block; height:auto; max-width: min(72vh, calc(100vw - 140px)); margin: 0 auto; }
+:root { --slide-ms: 600ms; }
 
-  /* Visible states */
-  .carousel-item.is-active { opacity: 1; transform: translateX(0); z-index: 3; pointer-events: auto; }
-  .carousel-item.is-prev  { opacity: 0.10; transform: translateX(-35%) scale(.96); z-index: 2; }
-  .carousel-item.is-next  { opacity: 0.10; transform: translateX( 35%) scale(.96); z-index: 2; }
-  .carousel-item.is-hidden { opacity: 0; transform: translateX(0) scale(.9); z-index: 1; }
+body { margin: 0; overflow-y: auto; min-height: 100vh; }
 
-  /* Directional enter (start position before animating to is-active) */
-  .carousel-item.enter-left  { transform: translateX(-60%); opacity: 0; }
-  .carousel-item.enter-right { transform: translateX( 60%); opacity: 0; }
+/* Force robust cross-browser centering of slides */
+.carousel-item {
+  left: 0;
+  right: 0;          /* stretch the abspos box horizontally */
+  margin-left: auto; /* center via auto margins */
+  margin-right: auto;
+  transform: none !important;       /* ignore previous translate */
+}
 
-  /* Chevron hit area stays on top */
-  .chevron { position: absolute; top: 50%; transform: translateY(-50%); background: transparent; border: 0; padding: 16px; cursor: pointer; z-index: 4; }
-  .chevron.left  { left: 8px;  }
-  .chevron.right { right: 8px; }
+/* Keep the active/prev/next transitions working horizontally */
+.carousel-item.active { transform: none !important; }
+.carousel-item.left   { transform: translateX(-100%) !important; }
+.carousel-item.right  { transform: translateX(100%)  !important; }
 
-  /* Music link hover: ~30% lighter (toward white) */
-  .music-links { display:flex; gap:16px; justify-content:center; margin-top: 14px; }
-  .music-links .icon img { transition: filter 200ms ease, opacity 200ms ease; }
-  .music-links .icon:hover img { filter: brightness(1.3); }
+/* Stage */
+.carousel { 
+  position: relative; 
+  opacity: 8;
+}
+
+
+.carousel-item { position: absolute; }  /* already positioned; keeps as anchor */
+
+/* States */
+.carousel-item.active {                 /* center / active */
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 3;
+}
+.carousel-item.left {                   /* previous (dim) at -100% */
+  transform: translate(-150%, 0);
+  opacity: 0;
+  z-index: 2;
+}
+.carousel-item.right {                  /* next (dim) at +100% */
+  transform: translate(50%, 0);
+  opacity: 0;
+  z-index: 2;
+}
+.carousel-item.off {                    /* everything else hidden */
+  opacity: 0;
+  z-index: 1;
+}
+
+/* make the image fully visible inside the 512×512 frame */
+.cover-block { 
+  width: 512px; 
+  height: 512px; 
+  display: grid; 
+  place-items: center; 
+  background: #0b0b0b;   /* or transparent/your brand color */
+}
+
+/* was: object-fit: cover; (crops) */
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;     /* shows 100% of the artwork */
+  display: block;
+  border-radius: 7px;      /* remove if you don’t want rounded corners */
+}
+
+/* mobile keeps the square stage; image still ‘contain’s inside it */
+@media (max-width: 600px) {
+  .carousel-slide, .cover-block { width: 100%; height: 88vw; }
+}
+
+.music-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;          /* 20px space between icons */
+  margin-top: 10px;   /* 10px space below cover art */
+  position: relative; /* remove any absolute positioning */
+}
+
+/* hide the legacy circle image you placed before the icons on slide 33 */
+.music-links > img[alt="Circle"] { display: none; }
+
+/* base icon “button” */
+.icon {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: inline-block;
+  pointer-events: auto; /* still gated by the slide's pointer-events */
+}
+
+/* hide the old PNG/SVG <img> inside the anchor */
+.icon > img { display: none; }
+
+/* white circular underlay, slightly larger than the glyph */
+.icon::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: #fff;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* colored glyph drawn from an SVG mask */
+.icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;  /* we set color per service */
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  z-index: 1;
+}
+
+/* service variants — classes will be added by JS */
+.icon--apple  { color: #e63e45; }
+.icon--spotify{ color: #65d46e; }
+.icon--yt     { color: #ea333d; }
+
+.icon--apple::after {
+  -webkit-mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_apple_music.svg");
+  mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_apple_music.svg");
+}
+.icon--spotify::after {
+  -webkit-mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_spotify.svg");
+  mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_spotify.svg");
+}
+.icon--yt::after {
+  -webkit-mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_youtube_music.svg");
+  mask-image: url("https://vectrgraphics.github.io/carrd-assets/images/icons/icon_youtube_music.svg");
+}
+
+/* (optional) subtle hover lift on the active slide */
+.carousel-item.active .icon:hover { transform: translateY(-1px); }
+
+/* Center both arrows on the active slide's vertical middle */
+.chevron{
+  position:absolute;
+  top: var(--chev-y, 50%);   /* JS sets --chev-y each time */
+  transform: translateY(-50%);
+  width:50px; height:50px; border:0; background:none; cursor:pointer; z-index:10;
+  display:grid; place-items:center;
+}
+
+/* positions left/right */
+.chevron.left  { left: calc(50% - 322px); }
+.chevron.right { right: calc(50% - 322px); }
+
+/* rotate ONLY the icon, not the button (so we don't clobber translateY) */
+.chevron.left img { transform: rotate(180deg); }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .carousel { touch-action: pan-y; }
+  .carousel-item { position: relative; top: auto; left: 50%; transform: translateX(-50%); width: 100%; }
+  .carousel-item.active { transform: translateX(-50%); }
+  .carousel-item.left  { transform: translateX(-150%); }
+  .carousel-item.right { transform: translateX(  50%); }
+  .carousel-slide, .cover-block { width: 100%; height: 88vw; }
+  .chevron { width: 28px; height: 42px; top: 50%; transform: translateY(-50%); }
+  .chevron.left  { left: -18px; transform: rotate(180deg) translateY(50%); }
+  .chevron.right { right: -18px; }
+}
