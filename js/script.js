@@ -1,71 +1,91 @@
-// script.js (drop-in)
+// script.js — Safari-hardened carousel
 document.addEventListener('DOMContentLoaded', () => {
-  const stage  = document.querySelector('.carousel');
-  const items  = Array.from(document.querySelectorAll('.carousel-item'));
+  const stage   = document.querySelector('.carousel');
+  const items   = Array.from(document.querySelectorAll('.carousel-item'));
   const nextBtn = document.querySelector('.chevron.right');
   const prevBtn = document.querySelector('.chevron.left');
 
-  if (!stage || !items.length || !nextBtn || !prevBtn) return;
+  if (!stage || !items.length) return;
 
-  // 1) Auto-tag icons so CSS can color & mask them (works across all slides)
+  // Allow nav buttons to be optional (don’t early return if missing)
+  const hasNext = !!nextBtn;
+  const hasPrev = !!prevBtn;
+
+  // Auto-tag icons so CSS can color & mask them
   autoTagIcons();
 
   const n = items.length;
   let index = items.findIndex(el => el.classList.contains('active'));
   if (index < 0) index = 0;
 
-  // 2) Position slides: center (active), neighbors (left/right), others (off)
-  function layout(i) {
-    const prev = (i - 1 + n) % n;
-    const next = (i + 1) % n;
+  // Ensure the initially active slide is marked
+  items.forEach((el, i) => el.classList.toggle('active', i === index));
 
-    items.forEach((el, k) => {
-      el.classList.remove('left','right','active','off');
-      if (k === i) el.classList.add('active');
-      else if (k === prev) el.classList.add('left');
-      else if (k === next) el.classList.add('right');
-      else el.classList.add('off');
-    });
+  // --- Navigation handlers ---
+  if (hasNext) nextBtn.addEventListener('click', () => go(1));
+  if (hasPrev) prevBtn.addEventListener('click', () => go(-1));
 
-    updateChevronY(); // keep arrows vertically centered on the active slide
-  }
+  // Keyboard arrows
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') go(1);
+    else if (e.key === 'ArrowLeft') go(-1);
+  });
 
-  // 3) Keep chevrons vertically centered on the active cover
-  function updateChevronY() {
-    const active = items[index];
-    const ar = active.getBoundingClientRect();
-    const sr = stage.getBoundingClientRect();
-    const centerY = ar.top - sr.top + ar.height / 2;
-    stage.style.setProperty('--chev-y', centerY + 'px');
-  }
-
-  // 4) Navigation (throttled to match CSS duration)
-  let busy = false;
-  const DURATION = 600; // keep in sync with CSS --slide-ms
-  function go(dir) {
-    if (busy) return;
-    busy = true;
-    index = (index + (dir > 0 ? 1 : -1) + n) % n;
-    layout(index);
-    setTimeout(() => { busy = false; }, DURATION);
-  }
-
-  // Init
-  layout(index);
-  updateChevronY();
-  window.addEventListener('resize', updateChevronY);
-  window.addEventListener('load', updateChevronY);
-
-  nextBtn.addEventListener('click', () => go(1));
-  prevBtn.addEventListener('click', () => go(-1));
-
-  // Swipe (mobile)
-  let startX = 0;
-  stage.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; }, { passive: true });
-  stage.addEventListener('touchend',   e => {
-    const dx = e.changedTouches[0].screenX - startX;
-    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+  // Basic swipe (horizontal)
+  let touchStartX = null;
+  stage.addEventListener('touchstart', (e) => {
+    const t = e.touches && e.touches[0];
+    touchStartX = t ? t.clientX : null;
   }, { passive: true });
+
+  stage.addEventListener('touchend', (e) => {
+    if (touchStartX == null) return;
+    const t = e.changedTouches && e.changedTouches[0];
+    if (!t) return;
+    const dx = t.clientX - touchStartX;
+    if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    touchStartX = null;
+  }, { passive: true });
+
+  function go(delta) {
+    index = (index + delta + n) % n;
+    updateActive(true);
+  }
+
+  function updateActive(smooth = false) {
+    items.forEach((el, i) => el.classList.toggle('active', i === index));
+    centerActive({ smooth });
+  }
+
+  // --- Centering logic (Safari-hardened) ---
+  function centerActive({ smooth = false } = {}) {
+    const active = items[index];
+    if (!active || !stage) return;
+
+    // Compute how far the active item is from the horizontal center of the stage
+    const stageRect = stage.getBoundingClientRect();
+    const itemRect  = active.getBoundingClientRect();
+
+    // delta is how much we need to scroll to bring active to center
+    const delta = (itemRect.left - stageRect.left) - (stage.clientWidth / 2 - itemRect.width / 2);
+    const target = Math.round(stage.scrollLeft + delta); // round to avoid sub-pixel issues in Safari
+
+    if (typeof stage.scrollTo === 'function') {
+      stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+    } else {
+      stage.scrollLeft = target;
+    }
+  }
+
+  // Initial center after layout (1 rAF), then after full load + an extra tick for Safari
+  requestAnimationFrame(() => centerActive({ smooth: false }));
+  window.addEventListener('load', () => {
+    centerActive({ smooth: false });
+    setTimeout(() => {
+      centerActive({ smooth: false });
+      if (stage && stage.dataset) stage.dataset.ready = "1"; // in case you use a visibility gate in CSS
+    }, 0);
+  });
 
   // --- helpers ---
   function autoTagIcons() {
