@@ -11,8 +11,8 @@ html, body {
 }
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  background: #0b0b0b;
+  font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  background: #09131C;
   color: #e7e7e7;
 }
 
@@ -74,7 +74,7 @@ body {
   height: var(--cover);
   display: grid;
   place-items: center;
-  background: #111;                 /* subtle frame */
+  background: #09131C;                 /* subtle frame */
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   overflow: hidden;
@@ -86,7 +86,7 @@ body {
   object-fit: contain;              /* preserve full art within 512×512 */
   image-rendering: auto;
   display: block;
-  background: #000;
+  background: #09131C;
 }
 
 /* --- Music links --- */
@@ -122,9 +122,9 @@ body {
 }
 
 /* Exact brand colors */
-.icon--apple   { color: #e63e45; }
+.icon--apple_music { color: #e63e45; }
 .icon--spotify { color: #65d46e; }
-.icon--yt      { color: #ea333d; }
+.icon--youtube_music { color: #ea333d; }
 
 /* --- Chevron controls --- */
 .chevron {
@@ -155,7 +155,7 @@ body {
   :root { --gap: 16px; }
   .carousel-item,
   .cover-block { width: min(88vw, var(--cover)); }
-  .cover-block { height: min(88vw, var(--cover)); border-radius: 12px; }
+  .cover-block { height: min(88vw, var(--cover)); border-radius: 4px; }
   .chevron { width: 38px; height: 58px; }
   .chevron.left { left: 0; }
   .chevron.right { right: 0; }
