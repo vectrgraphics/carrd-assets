@@ -122,9 +122,9 @@ body {
 }
 
 /* Exact brand colors */
-.icon--apple   { color: #e63e45; }
+.icon--apple_music { color: #e63e45; }
 .icon--spotify { color: #65d46e; }
-.icon--yt      { color: #ea333d; }
+.icon--youtube_music { color: #ea333d; }
 
 /* --- Chevron controls --- */
 .chevron {
