@@ -162,7 +162,7 @@ body {
   .cover-block { height: min(88vw, var(--cover)); border-radius: 4px; }
   .chevron { width: 24px; height: 36px; }
   .chevron.left  { left: 24px; }
-  .chevron.right { right: 8px; }}
+  .chevron.right { right: 24px; }
 }
 
 
