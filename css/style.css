@@ -106,7 +106,6 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  border: 2px solid currentColor;   /* color ring follows brand color */
   text-decoration: none;
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
   will-change: transform;

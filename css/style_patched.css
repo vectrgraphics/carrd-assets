@@ -111,14 +111,16 @@ body {
   will-change: transform;
   opacity: 1;
 }
-.music-links .icon:hover { transform: translateY(-1px); opacity: 1; }
-.music-links .icon:active { transform: translateY(0); }
+.music-links .icon:hover { transform: translateY(0) scale(1.1); opacity: 1; }
+.music-links .icon:active { transform: translateY(0) scale(0.9); }
 
 .icon svg {
   width: 36px;
   height: 36px;
   fill: currentColor;
 }
+
+
 .icon--apple_music { color: #e63e45; }
 .icon--spotify { color: #65d46e; }
 .icon--youtube_music { color: #ea333d; }
@@ -140,8 +142,8 @@ body {
   opacity: 1;
   transition: opacity 160ms ease, transform 160ms ease;
 }
-.chevron:hover { opacity: 1; transform: translateY(-50%) scale(1.03); }
-.chevron:active { transform: translateY(-50%) scale(0.98); }
+.chevron:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+.chevron:active { transform: translateY(-50%) scale(0.9); }
 .chevron.left { left: 24px; }
 .chevron.right { right: 24px; }
 /* Rotate ONLY the glyph inside the left chevron */
@@ -152,9 +154,9 @@ body {
   :root { --gap: 24px; }
   .carousel-item,
   .cover-block { width: min(88vw, var(--cover)); }
-  .cover-block { height: min(88vw, var(--cover)); border-radius: 4px; }
+  .cover-block { height: min(88vw, var(--cover)); border-radius: 6px; }
   .chevron { width: 24px; height: 36px; }
-  .chevron.left  { left: 24px; }
+  .chevron.left { left: 24px; }
   .chevron.right { right: 24px; }
 }
 
