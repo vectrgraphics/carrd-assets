@@ -121,7 +121,11 @@ body {
   display: block;
 }
 
-/* Exact brand colors */
+.icon svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
 .icon--apple_music { color: #e63e45; }
 .icon--spotify { color: #65d46e; }
 .icon--youtube_music { color: #ea333d; }
@@ -158,7 +162,7 @@ body {
   .cover-block { height: min(88vw, var(--cover)); border-radius: 4px; }
   .chevron { width: 24px; height: 36px; }
   .chevron.left  { left: 24px; }
-  .chevron.right { right: 24px; }}
+  .chevron.right { right: 8px; }}
 }
 
 
