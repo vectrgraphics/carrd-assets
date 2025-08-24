@@ -103,8 +103,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 1000px;
   border: 2px solid currentColor;   /* color ring follows brand color */
   text-decoration: none;
@@ -116,14 +116,14 @@ body {
 .music-links .icon:active { transform: translateY(0); }
 
 .music-links .icon img {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   display: block;
 }
 
 .icon svg {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
   fill: currentColor;
 }
 .icon--apple_music { color: #e63e45; }
@@ -168,4 +168,4 @@ body {
 
 /* Safety: ensure icon <img> is visible if any base mask rules are present */
 .icon::before, .icon::after { display: none !important; }
-.icon > img { display: block !important; width: 24px; height: 24px; }
+.icon > img { display: block !important; width: 36px; height: 36px; }
