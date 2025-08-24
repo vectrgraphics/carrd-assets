@@ -91,12 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- helpers ---
   function autoTagIcons() {
-    document.querySelectorAll('.music-links .icon').forEach(a => {apple_music
+    document.querySelectorAll('.music-links .icon').forEach(a => {Apple Music
       const img = a.querySelector('img');
       const src = (img?.getAttribute('src') || '').toLowerCase();
-           if (src.includes('apple_music'))   a.classList.add('icon--apple_music');
-      else if (src.includes('spotify')) a.classList.add('icon--spotify');
-      else if (src.includes('youtube_music')) a.classList.add('icon--youtube_music');
+           if (src.includes('Apple Music')) a.classList.add('icon--apple_music');
+      else if (src.includes('Spotify')) a.classList.add('icon--spotify');
+      else if (src.includes('Youtube Music')) a.classList.add('icon--youtube_music');
     });
   }
 });
