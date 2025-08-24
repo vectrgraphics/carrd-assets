@@ -1,4 +1,4 @@
-:root {
+root {
   --cover: 512px;             /* target cover size */
   --gap: 24px;                /* space between slides */
   --fade: 0.1;                /* opacity for adjacent slides */
@@ -98,7 +98,7 @@ body {
   justify-content: center;
 }
 
-/* Brand-colored link badges */
+/* Brand-colored link icons (glyph only, no border ring) */
 .music-links .icon {
   display: inline-flex;
   align-items: center;
@@ -106,7 +106,6 @@ body {
   width: 36px;
   height: 36px;
   border-radius: 1000px;
-  border: 2px solid currentColor;   /* color ring follows brand color */
   text-decoration: none;
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
   will-change: transform;
@@ -114,12 +113,6 @@ body {
 }
 .music-links .icon:hover { transform: translateY(-1px); opacity: 1; }
 .music-links .icon:active { transform: translateY(0); }
-
-.music-links .icon img {
-  width: 36px;
-  height: 36px;
-  display: block;
-}
 
 .icon svg {
   width: 36px;
@@ -164,7 +157,6 @@ body {
   .chevron.left  { left: 24px; }
   .chevron.right { right: 24px; }
 }
-
 
 /* Safety: ensure icon <img> is visible if any base mask rules are present */
 .icon::before, .icon::after { display: none !important; }
