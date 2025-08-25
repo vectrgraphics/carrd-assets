@@ -146,7 +146,6 @@ body {
 .chevron:active { transform: translateY(-50%) scale(0.98); }
 .chevron.left { left: 8px; }
 .chevron.right { right: 8px; }
-/* Rotate ONLY the glyph inside the left chevron */
 .chevron.left img { transform: rotate(180deg); }
 
 /* --- Responsive: scale the cover on small viewports --- */

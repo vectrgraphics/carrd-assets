@@ -131,10 +131,10 @@ body {
   opacity: 1;
   transition: opacity 160ms ease, transform 160ms ease;
 }
-
-.chevron img { transition: transform 160ms ease, opacity 160ms ease; }
-.chevron:hover img { transform: scale(1.1); }
-.chevron:active img { transform: scale(0.9); }
+.chevron:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+.chevron:active { transform: translateY(-50%) scale(0.9); }
+.chevron.left { left: 24px; }
+.chevron.right { right: 24px; }
 .chevron.left img { transform: rotate(180deg); }
 
 @media (max-width: 600px) {
