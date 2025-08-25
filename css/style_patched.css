@@ -92,8 +92,8 @@ body {
 /* --- Music links --- */
 .music-links {
   display: flex;
-  gap: 36px;
-  margin-top: 36px;
+  gap: 24px;
+  margin-top: 24px;
   align-items: center;
   justify-content: center;
 }
@@ -103,8 +103,10 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
+  border: 2px;
+  border-color: #FFFFFF;
   border-radius: 1000px;
   text-decoration: none;
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
@@ -161,4 +163,4 @@ body {
 
 /* Safety: ensure icon <img> is visible if any base mask rules are present */
 .icon::before, .icon::after { display: none !important; }
-.icon > img { display: block !important; width: 36px; height: 36px; }
+.icon > img { display: block !important; width: 48px; height: 48px; }
