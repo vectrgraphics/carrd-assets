@@ -98,56 +98,44 @@ body {
   justify-content: center;
 }
 
-/* Brand-colored link icons (glyph only, no border ring) */
+/* glyph-only look + white ring */
 .music-links .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 48px;
   height: 48px;
+  border: 2px solid #fff;     /* ← move border here */
+  border-radius: 50%;
   text-decoration: none;
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
-  will-change: transform;
-  opacity: 1;
 }
-.music-links .icon:hover { transform: translateY(0) scale(1.1); opacity: 1; }
-.music-links .icon:active { transform: translateY(0) scale(0.9); }
 
 .icon svg {
   width: 48px;
   height: 48px;
-  border: 2px;
-  border-color: #FFFFFF;
-  fill: currentColor;
+  fill: currentColor;          /* brand-colored glyph */
 }
-
 
 .icon--apple_music { color: #e63e45; }
 .icon--spotify { color: #65d46e; }
 .icon--youtube_music { color: #ea333d; }
 
-/* --- Chevron controls --- */
+/* keep the button’s position stable */
 .chevron {
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
   width: 24px;
   height: 36px;
-  display: grid;
-  place-items: center;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  z-index: 999;
-  opacity: 1;
-  transition: opacity 160ms ease, transform 160ms ease;
 }
-.chevron:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
-.chevron:active { transform: translateY(-50%) scale(0.9); }
-.chevron.left { left: 24px; }
-.chevron.right { right: 24px; }
-.chevron.left img { transform: rotate(180deg); }
+
+/* animate only the icon inside */
+.chevron img { 
+  transition: transform 160ms ease, opacity 160ms ease; 
+}
+.chevron:hover img { transform: scale(1.1); }
+.chevron:active img { transform: scale(0.9); }
 
 /* --- Responsive: scale the cover on small viewports --- */
 @media (max-width: 600px) {
