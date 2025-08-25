@@ -106,6 +106,7 @@ body {
   width: 48px;
   height: 48px;
   border: 2px solid #fff;     /* ← move border here */
+  background: #fff;          /* white background */
   border-radius: 50%;
   text-decoration: none;
   transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
@@ -121,21 +122,27 @@ body {
 .icon--spotify { color: #65d46e; }
 .icon--youtube_music { color: #ea333d; }
 
-/* keep the button’s position stable */
+/* keep button box stable */
 .chevron {
   position: fixed;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* no scale here */
   width: 24px;
   height: 36px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  z-index: 999;
 }
 
-/* animate only the icon inside */
-.chevron img { 
-  transition: transform 160ms ease, opacity 160ms ease; 
-}
+/* animate only the chevron glyph */
+.chevron img { transition: transform 160ms ease, opacity 160ms ease; }
 .chevron:hover img { transform: scale(1.1); }
 .chevron:active img { transform: scale(0.9); }
+
+/* keep only the rotate for the left glyph */
+.chevron.left img { transform: rotate(180deg); }
 
 /* --- Responsive: scale the cover on small viewports --- */
 @media (max-width: 600px) {
