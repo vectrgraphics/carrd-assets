@@ -74,7 +74,7 @@ body {
   height: var(--cover);
   display: grid;
   place-items: center;
-  background: #09131C;                 /* subtle frame */
+  background: #09131C;
   border-radius: 5px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   overflow: hidden;
@@ -92,8 +92,8 @@ body {
 /* --- Music links --- */
 .music-links {
   display: flex;
-  gap: 24px;
-  margin-top: 24px;
+  gap: 36px;
+  margin-top: 36px;
   align-items: center;
   justify-content: center;
 }
@@ -146,7 +146,6 @@ body {
 .chevron:active { transform: translateY(-50%) scale(0.9); }
 .chevron.left { left: 24px; }
 .chevron.right { right: 24px; }
-/* Rotate ONLY the glyph inside the left chevron */
 .chevron.left img { transform: rotate(180deg); }
 
 /* --- Responsive: scale the cover on small viewports --- */
