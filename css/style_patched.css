@@ -92,22 +92,24 @@ body {
   justify-content: center;
 }
 
+/* Button wrapper: transparent with 2px white border */
 .music-links .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 48px;
   height: 48px;
-  border: 2px solid #fff;     
-  background: #fff;         
-  border-radius: 50%;
+  border: 2px solid #fff;     /* outer white ring */
+  border-radius: 9999px;       /* circle */
+  background: transparent;     /* keep transparent (no white fill) */
   text-decoration: none;
-  transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
 }
 
-.icon svg {
-  width: 48px;
-  height: 48px;
+/* Size all SVGs consistently */
+.music-links .icon svg {
+  width: 36px;
+  height: 36px;
+  display: block;
 }
 .icon:hover { opacity: 0.8; }
 .icon:active { opacity: 0.7; }
