@@ -50,13 +50,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const prev = index;
     index = (index + delta + n) % n;
 
-    // detect wrap (last<->first)
-    const wrapped = (prev === n - 1 && index === 0) || (prev === 0 && index === n - 1);
+    const wrappedForward  = (prev === n - 1 && index === 0); // 33 -> 1
+    const wrappedBackward = (prev === 0 && index === n - 1); // 1 -> 33
 
-    updateActive(!wrapped); // no smooth when wrapping (Safari)
-    if (wrapped) {
-      // extra re-center after layout settles (Safari)
-      requestAnimationFrame(() => requestAnimationFrame(() => centerActive({ smooth: false })));
+    // Toggle active first
+    items.forEach((el, i) => el.classList.toggle('active', i === index));
+
+    if (wrappedForward) {
+      // jump to left edge before measuring
+      stage.scrollLeft = 0;
+      requestAnimationFrame(() => centerActive({ smooth: false }));
+    } else if (wrappedBackward) {
+      // jump to right edge before measuring
+      stage.scrollLeft = stage.scrollWidth;
+      requestAnimationFrame(() => centerActive({ smooth: false }));
+    } else {
+      // normal move
+      requestAnimationFrame(() => centerActive({ smooth: true }));
     }
   }
 
@@ -74,12 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const stageRect = stage.getBoundingClientRect();
     const itemRect  = active.getBoundingClientRect();
 
-    // distance needed to center the active card
     const delta  = (itemRect.left - stageRect.left) - (stage.clientWidth / 2 - itemRect.width / 2);
-    let target   = Math.round(stage.scrollLeft + delta);
+    let   target = Math.round(stage.scrollLeft + delta);
 
-    // clamp scrollLeft to valid range (prevents “stuck on right”)
-    const max    = Math.max(0, stage.scrollWidth - stage.clientWidth);
+    // clamp to valid range (prevents “stuck on right”)
+    const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
     if (target < 0) target = 0;
     else if (target > max) target = max;
 
