@@ -101,7 +101,7 @@ body {
   height: 48px;
   border: 2px solid #fff;     /* outer white ring */
   border-radius: 9999px;       /* circle */
-  background: transparent;     /* keep transparent (no white fill) */
+  background: #fff;
   text-decoration: none;
 }
 
