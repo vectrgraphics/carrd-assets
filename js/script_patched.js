@@ -45,59 +45,41 @@ document.addEventListener('DOMContentLoaded', () => {
     touchStartX = null;
   }, { passive: true });
 
-  // ---- Navigation + wrap fix
-  function go(delta) {
-    const prev = index;
-    index = (index + delta + n) % n;
+function go(delta) {
+  const prev = index;
+  index = (index + delta + n) % n;
 
-    const wrappedForward  = (prev === n - 1 && index === 0); // 33 -> 1
-    const wrappedBackward = (prev === 0 && index === n - 1); // 1 -> 33
+  // detect wrap (end <-> start)
+  const wrapped = (prev === n - 1 && index === 0) || (prev === 0 && index === n - 1);
 
-    // Toggle active first
-    items.forEach((el, i) => el.classList.toggle('active', i === index));
+  updateActive(!wrapped); // no smooth on wrap
+}
 
-    if (wrappedForward) {
-      // jump to left edge before measuring
-      stage.scrollLeft = 0;
-      requestAnimationFrame(() => centerActive({ smooth: false }));
-    } else if (wrappedBackward) {
-      // jump to right edge before measuring
-      stage.scrollLeft = stage.scrollWidth;
-      requestAnimationFrame(() => centerActive({ smooth: false }));
-    } else {
-      // normal move
-      requestAnimationFrame(() => centerActive({ smooth: true }));
-    }
+function updateActive(smooth = false) {
+  items.forEach((el, i) => el.classList.toggle('active', i === index));
+  // give layout a tick for accurate measurements
+  requestAnimationFrame(() => centerActive({ smooth }));
+}
+
+function centerActive({ smooth = false } = {}) {
+  const active = items[index];
+  if (!active || !stage) return;
+
+  // center using document flow metrics (robust in Safari, ignores current scroll)
+  const itemCenter = active.offsetLeft + active.offsetWidth / 2;
+  let target = Math.round(itemCenter - stage.clientWidth / 2);
+
+  // clamp to valid scroll range
+  const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
+  if (target < 0) target = 0;
+  else if (target > max) target = max;
+
+  if (typeof stage.scrollTo === 'function') {
+    stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+  } else {
+    stage.scrollLeft = target;
   }
-
-  function updateActive(smooth = false) {
-    items.forEach((el, i) => el.classList.toggle('active', i === index));
-    // slight defer improves Safari measurements
-    requestAnimationFrame(() => centerActive({ smooth }));
-  }
-
-  // ---- Centering (clamped for Safari)
-  function centerActive({ smooth = false } = {}) {
-    const active = items[index];
-    if (!active || !stage) return;
-
-    const stageRect = stage.getBoundingClientRect();
-    const itemRect  = active.getBoundingClientRect();
-
-    const delta  = (itemRect.left - stageRect.left) - (stage.clientWidth / 2 - itemRect.width / 2);
-    let   target = Math.round(stage.scrollLeft + delta);
-
-    // clamp to valid range (prevents “stuck on right”)
-    const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
-    if (target < 0) target = 0;
-    else if (target > max) target = max;
-
-    if (typeof stage.scrollTo === 'function') {
-      stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
-    } else {
-      stage.scrollLeft = target;
-    }
-  }
+}
 
   window.addEventListener('resize', () => centerActive({ smooth: false }));
 
