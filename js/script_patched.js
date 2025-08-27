@@ -48,8 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   function go(delta) {
+    const prev = index;
     index = (index + delta + n) % n;
-    updateActive(true);
+
+    // Detect wrap-around
+    const wrapped = (prev === n - 1 && index === 0) || (prev === 0 && index === n - 1);
+  
+    updateActive(!wrapped);   // no smooth scroll on wrap
+    if (wrapped) {
+      requestAnimationFrame(() => requestAnimationFrame(() => centerActive({ smooth: false })));
+    }
   }
 
   function updateActive(smooth = false) {
@@ -62,13 +70,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const active = items[index];
     if (!active || !stage) return;
 
-    // Compute how far the active item is from the horizontal center of the stage
     const stageRect = stage.getBoundingClientRect();
     const itemRect  = active.getBoundingClientRect();
 
-    // delta is how much we need to scroll to bring active to center
-    const delta = (itemRect.left - stageRect.left) - (stage.clientWidth / 2 - itemRect.width / 2);
-    const target = Math.round(stage.scrollLeft + delta); // round to avoid sub-pixel issues in Safari
+    const delta  = (itemRect.left - stageRect.left) - (stage.clientWidth / 2 - itemRect.width / 2);
+    let target   = Math.round(stage.scrollLeft + delta);
+
+    // Clamp scrollLeft
+    const max    = Math.max(0, stage.scrollWidth - stage.clientWidth);
+    if (target < 0) target = 0;
+    else if (target > max) target = max;
 
     if (typeof stage.scrollTo === 'function') {
       stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
