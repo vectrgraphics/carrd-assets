@@ -8,6 +8,7 @@
 html, body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
@@ -84,6 +85,9 @@ body {
 }
 
 /* --- Music links --- */
+html[data-icons-ready="0"] .music-links { visibility: hidden; }
+html[data-icons-ready="1"] .music-links { visibility: visible; }
+
 .music-links {
   display: flex;
   gap: 12px;

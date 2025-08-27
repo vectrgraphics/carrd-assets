@@ -91,13 +91,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- helpers ---
   function autoTagIcons() {
-  document.querySelectorAll('.music-links .icon').forEach(a => {
-    const img = a.querySelector('img');
-    const src = (img?.getAttribute('src') || '').toLowerCase();
-         if (src.includes('apple_music'))   a.classList.add('icon--apple_music');
-    else if (src.includes('spotify')) a.classList.add('icon--spotify');
-    else if (src.includes('youtube_music')) a.classList.add('icon--youtube_music');
-  });
-}
-   
+    // Only relevant if some slides still use <img> icons.
+    document.querySelectorAll('.music-links .icon').forEach(a => {
+      const img = a.querySelector('img');
+      if (!img) return;
+      const src = (img.getAttribute('src') || '').toLowerCase();
+           if (src.includes('apple_music')) a.classList.add('icon--apple_music');
+      else if (src.includes('spotify'))    a.classList.add('icon--spotify');
+      else if (src.includes('youtube_music')) a.classList.add('icon--youtube_music');
+    });
+  }
+
+  // --- Inline external SVG sprite so <use href="#..."> is same-document ---
+  (function loadSprite () {
+    var SPRITE_URL = 'https://vectrgraphics.github.io/carrd-assets/images/icons/music-icons.svg';
+    var root = document.documentElement;
+    root.setAttribute('data-icons-ready', '0');
+
+    fetch(SPRITE_URL, { mode: 'cors' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('SVG sprite load failed: ' + res.status);
+        return res.text();
+      })
+      .then(function (svgText) {
+        // Create a container and parse
+        var holder = document.createElement('div');
+        holder.innerHTML = svgText.trim();
+
+        // Grab the first <svg> element (ignore stray text nodes/comments)
+        var svg = holder.querySelector('svg');
+        if (!svg) throw new Error('Sprite has no <svg> root');
+
+        // Hide and mark decorative
+        svg.style.position = 'absolute';
+        svg.style.width = '0';
+        svg.style.height = '0';
+        svg.style.overflow = 'hidden';
+        svg.setAttribute('aria-hidden', 'true');
+        svg.setAttribute('focusable', 'false');
+
+        // Insert at top of <body>
+        document.body.insertAdjacentElement('afterbegin', svg);
+
+        // Add xlink:href fallbacks for older Safari if needed
+        document.querySelectorAll('use[href^="#"]').forEach(function (u) {
+          var id = u.getAttribute('href');
+          if (id && !u.hasAttributeNS('http://www.w3.org/1999/xlink', 'href')) {
+            u.setAttributeNS('http://www.w3.org/1999/xlink', 'href', id);
+          }
+        });
+
+        root.setAttribute('data-icons-ready', '1');
+      })
+      .catch(function (err) {
+        console.error(err);
+        root.setAttribute('data-icons-ready', '1'); // fail-open
+      });
+  })();
+
+  // If images are still decoding, recenter once they’re ready (prevents a tiny drift)
+  if ('fonts' in document) {
+    Promise.allSettled(
+      Array.from(document.images).map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve())
+    ).then(() => centerActive({ smooth: false }));
+  }
 });
