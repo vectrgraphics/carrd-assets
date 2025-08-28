@@ -86,10 +86,6 @@ function centerActive({ smooth = false } = {}) {
   } else {
     stage.scrollLeft = target;
   }
-});
-  } else {
-    stage.scrollLeft = target;
-  }
 }
 
   window.addEventListener('resize', () => centerActive({ smooth: false }));
