@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ensure initial active
   items.forEach((el, i) => el.classList.toggle('active', i === index));
 
+  stage.style.scrollSnapType = 'x mandatory';
+  items.forEach(el => el.style.scrollSnapAlign = 'center');
+
   // Nav handlers
   if (hasNext) nextBtn.addEventListener('click', () => go(1));
   if (hasPrev) prevBtn.addEventListener('click', () => go(-1));
