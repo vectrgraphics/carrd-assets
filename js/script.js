@@ -1,4 +1,4 @@
-// script.js — Safari-hardened carousel
+// script.js — Safari-hardened carousel + cross-origin SVG sprite inliner
 document.addEventListener('DOMContentLoaded', () => {
   const stage   = document.querySelector('.carousel');
   const items   = Array.from(document.querySelectorAll('.carousel-item'));
@@ -7,31 +7,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!stage || !items.length) return;
 
-  // Allow nav buttons to be optional (don’t early return if missing)
+  // Environment flags
+  const inIframe = (() => { try { return window.top !== window.self; } catch { return true; } })();
+  const isSafari = /^((?!chrome|chromium|crios|fxios).)*safari/i.test(navigator.userAgent);
+
+  // Enable scroll snapping (non-invasive; helps our Safari iframe fallback)
+  stage.style.scrollSnapType = 'x mandatory';
+  items.forEach(el => el.style.scrollSnapAlign = 'center');
+
   const hasNext = !!nextBtn;
   const hasPrev = !!prevBtn;
 
-  // Auto-tag icons so CSS can color & mask them
   autoTagIcons();
 
   const n = items.length;
   let index = items.findIndex(el => el.classList.contains('active'));
   if (index < 0) index = 0;
 
-  // Ensure the initially active slide is marked
+  // Ensure initial active
   items.forEach((el, i) => el.classList.toggle('active', i === index));
 
-  // --- Navigation handlers ---
+  // Nav handlers
   if (hasNext) nextBtn.addEventListener('click', () => go(1));
   if (hasPrev) prevBtn.addEventListener('click', () => go(-1));
 
-  // Keyboard arrows
+  // Keyboard
   window.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') go(1);
     else if (e.key === 'ArrowLeft') go(-1);
   });
 
-  // Basic swipe (horizontal)
+  // Basic swipe
   let touchStartX = null;
   stage.addEventListener('touchstart', (e) => {
     const t = e.touches && e.touches[0];
@@ -48,27 +54,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 
   function go(delta) {
+    const prev = index;
     index = (index + delta + n) % n;
-    updateActive(true);
+
+    // detect wrap (end <-> start)
+    const wrapped = (prev === n - 1 && index === 0) || (prev === 0 && index === n - 1);
+
+    updateActive(!wrapped); // no smooth on wrap
   }
 
   function updateActive(smooth = false) {
     items.forEach((el, i) => el.classList.toggle('active', i === index));
-    centerActive({ smooth });
+    requestAnimationFrame(() => centerActive({ smooth }));
   }
 
-  // --- Centering logic (Safari-hardened) ---
   function centerActive({ smooth = false } = {}) {
     const active = items[index];
     if (!active || !stage) return;
 
-    // Compute how far the active item is from the horizontal center of the stage
+    // Safari + iframe: compute real edge padding and let snap do the centering
+    if (inIframe && isSafari) {
+      const edge = Math.max(0, (stage.clientWidth - active.offsetWidth) / 2);
+      stage.style.paddingLeft  = edge + 'px';
+      stage.style.paddingRight = edge + 'px';
+
+      requestAnimationFrame(() => {
+        void stage.scrollLeft;
+        active.scrollIntoView({
+          inline: 'center',
+          block: 'nearest',
+          behavior: smooth ? 'smooth' : 'auto'
+        });
+      });
+      return;
+    }
+
+    // Default path
+    void stage.scrollLeft;
     const stageRect = stage.getBoundingClientRect();
     const itemRect  = active.getBoundingClientRect();
+    const relativeLeft = itemRect.left - stageRect.left;
+    const contentLeft  = relativeLeft + stage.scrollLeft;
+    const itemCenter   = contentLeft + itemRect.width / 2;
 
-    // delta is how much we need to scroll to bring active to center
-    const delta = (itemRect.left - stageRect.left) - (stage.clientWidth / 2 - itemRect.width / 2);
-    const target = Math.round(stage.scrollLeft + delta); // round to avoid sub-pixel issues in Safari
+    let target = Math.round(itemCenter - stage.clientWidth / 2);
+    const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
+    if (target < 0) target = 0;
+    else if (target > max) target = max;
 
     if (typeof stage.scrollTo === 'function') {
       stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
@@ -77,24 +109,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Initial center after layout (1 rAF), then after full load + an extra tick for Safari
-  requestAnimationFrame(() => centerActive({ smooth: false }));
+  window.addEventListener('resize', () => centerActive({ smooth: false }));
+
+  requestAnimationFrame(() => {
+    centerActive({ smooth: false });
+    if (stage && stage.dataset) stage.dataset.ready = '1';
+  });
   window.addEventListener('load', () => {
     centerActive({ smooth: false });
     setTimeout(() => {
       centerActive({ smooth: false });
-      if (stage && stage.dataset) stage.dataset.ready = "1"; // in case you use a visibility gate in CSS
+      if (stage && stage.dataset) stage.dataset.ready = '1';
     }, 0);
   });
 
-  // --- helpers ---
+  Promise.allSettled(
+    Array.from(document.images).map(img => (img.decode ? img.decode().catch(() => {}) : Promise.resolve()))
+  ).then(() => centerActive({ smooth: false }));
+
   function autoTagIcons() {
     document.querySelectorAll('.music-links .icon').forEach(a => {
       const img = a.querySelector('img');
-      const src = (img?.getAttribute('src') || '').toLowerCase();
-           if (src.includes('Apple Music'))   a.classList.add('icon--apple');
-      else if (src.includes('Spotify')) a.classList.add('icon--spotify');
-      else if (src.includes('Youtube Music')) a.classList.add('icon--yt');
+      if (!img) return;
+      const src = (img.getAttribute('src') || '').toLowerCase();
+           if (src.includes('apple_music')) a.classList.add('icon--apple_music');
+      else if (src.includes('spotify'))    a.classList.add('icon--spotify');
+      else if (src.includes('youtube_music')) a.classList.add('icon--youtube_music');
     });
   }
+
+  (function loadSprite () {
+    var SPRITE_URL = 'https://vectrgraphics.github.io/carrd-assets/images/icons/music-icons.svg';
+    var root = document.documentElement;
+    root.setAttribute('data-icons-ready', '0');
+
+    fetch(SPRITE_URL, { mode: 'cors' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('SVG sprite load failed: ' + res.status);
+        return res.text();
+      })
+      .then(function (svgText) {
+        var holder = document.createElement('div');
+        holder.innerHTML = svgText.trim();
+        var svg = holder.querySelector('svg');
+        if (!svg) throw new Error('Sprite has no <svg> root');
+        svg.style.position = 'absolute';
+        svg.style.width = '0';
+        svg.style.height = '0';
+        svg.style.overflow = 'hidden';
+        svg.setAttribute('aria-hidden', 'true');
+        svg.setAttribute('focusable', 'false');
+        document.body.insertAdjacentElement('afterbegin', svg);
+        document.querySelectorAll('use[href^="#"]').forEach(function (u) {
+          var id = u.getAttribute('href');
+          if (id && !u.hasAttributeNS('http://www.w3.org/1999/xlink', 'href')) {
+            u.setAttributeNS('http://www.w3.org/1999/xlink', 'href', id);
+          }
+        });
+        root.setAttribute('data-icons-ready', '1');
+      })
+      .catch(function (err) {
+        console.error(err);
+        root.setAttribute('data-icons-ready', '1');
+      });
+  })();
 });
