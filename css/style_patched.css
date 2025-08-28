@@ -38,7 +38,8 @@ body {
 .carousel::before,
 .carousel::after {
   content: "";
-  flex: 0 0 clamp(0px, calc((100% - var(--cover)) / 2), 100vw);
+  /* keep the same intent, but avoid viewport units inside iframes */
+  flex: 0 0 clamp(0px, calc((100% - var(--cover)) / 2), 100%);
 }
 
 .carousel-item {

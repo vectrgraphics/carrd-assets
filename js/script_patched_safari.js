@@ -15,6 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const n = items.length;
   let index = items.findIndex(el => el.classList.contains('active'));
   if (index < 0) index = 0;
+  
+  const inIframe = (() => { try { return window.top !== window.self; } catch { return true; } })();
+  const isSafari = /^((?!chrome|chromium|crios|fxios).)*safari/i.test(navigator.userAgent);
 
   // Ensure initial active
   items.forEach((el, i) => el.classList.toggle('active', i === index));
@@ -68,22 +71,26 @@ function centerActive({ smooth = false } = {}) {
   const active = items[index];
   if (!active || !stage) return;
 
-  // ensure layout is current in Safari before measuring
-  void stage.scrollLeft;
+  // If Safari inside an iframe, avoid math and let the browser snap-center it.
+  if (inIframe && isSafari) {
+    // ensure layout tick
+    void stage.scrollLeft;
+    // you already set snap via JS; this will center precisely
+    active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: smooth ? 'smooth' : 'auto' });
+    return;
+  }
 
-  // measure in viewport space, then convert to content space
+  // --- existing math path for all other cases (keeps your current behavior) ---
+  void stage.scrollLeft; // reflow
   const stageRect = stage.getBoundingClientRect();
   const itemRect  = active.getBoundingClientRect();
   const relativeLeft = itemRect.left - stageRect.left;
-  const contentLeft  = relativeLeft + stage.scrollLeft; // <-- key Safari fix
+  const contentLeft  = relativeLeft + stage.scrollLeft;
   const itemCenter   = contentLeft + itemRect.width / 2;
 
   let target = Math.round(itemCenter - stage.clientWidth / 2);
-
-  // clamp to scrollable range
   const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
-  if (target < 0) target = 0;
-  else if (target > max) target = max;
+  if (target < 0) target = 0; else if (target > max) target = max;
 
   if (typeof stage.scrollTo === 'function') {
     stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
