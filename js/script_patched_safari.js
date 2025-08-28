@@ -65,18 +65,19 @@ function centerActive({ smooth = false } = {}) {
   const active = items[index];
   if (!active || !stage) return;
 
-  // Force a reflow so Safari has up-to-date layout before measuring
+  // ensure layout is current in Safari before measuring
   void stage.scrollLeft;
 
-  // Measure position relative to the stage using bounding rects (Safari-safe)
+  // measure in viewport space, then convert to content space
   const stageRect = stage.getBoundingClientRect();
   const itemRect  = active.getBoundingClientRect();
   const relativeLeft = itemRect.left - stageRect.left;
-  const itemCenter = relativeLeft + itemRect.width / 2;
+  const contentLeft = relativeLeft + stage.scrollLeft;
+  const itemCenter = contentLeft + itemRect.width / 2;
 
   let target = Math.round(itemCenter - stage.clientWidth / 2);
 
-  // clamp to valid scroll range
+  // clamp to scrollable range
   const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
   if (target < 0) target = 0;
   else if (target > max) target = max;
