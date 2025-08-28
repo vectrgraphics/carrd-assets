@@ -71,16 +71,28 @@ function centerActive({ smooth = false } = {}) {
   const active = items[index];
   if (!active || !stage) return;
 
-  // If Safari inside an iframe, avoid math and let the browser snap-center it.
+  // Safari + iframe: compute real edge padding and let snap do the centering
   if (inIframe && isSafari) {
-    // ensure layout tick
-    void stage.scrollLeft;
-    // you already set snap via JS; this will center precisely
-    active.scrollIntoView({ inline: 'center', block: 'nearest', behavior: smooth ? 'smooth' : 'auto' });
+    // how much space on each side to truly center the active slide
+    const edge = Math.max(0, (stage.clientWidth - active.offsetWidth) / 2);
+
+    // override spacer pseudo-elements with explicit padding (iframe-safe)
+    stage.style.paddingLeft  = edge + 'px';
+    stage.style.paddingRight = edge + 'px';
+
+    // ensure layout tick, then snap-center
+    requestAnimationFrame(() => {
+      void stage.scrollLeft; // reflow for Safari
+      active.scrollIntoView({
+        inline: 'center',
+        block: 'nearest',
+        behavior: smooth ? 'smooth' : 'auto'
+      });
+    });
     return;
   }
 
-  // --- existing math path for all other cases (keeps your current behavior) ---
+  // --- default path for all other cases ---
   void stage.scrollLeft; // reflow
   const stageRect = stage.getBoundingClientRect();
   const itemRect  = active.getBoundingClientRect();
@@ -90,7 +102,8 @@ function centerActive({ smooth = false } = {}) {
 
   let target = Math.round(itemCenter - stage.clientWidth / 2);
   const max = Math.max(0, stage.scrollWidth - stage.clientWidth);
-  if (target < 0) target = 0; else if (target > max) target = max;
+  if (target < 0) target = 0;
+  else if (target > max) target = max;
 
   if (typeof stage.scrollTo === 'function') {
     stage.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
