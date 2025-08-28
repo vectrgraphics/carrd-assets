@@ -72,8 +72,8 @@ function centerActive({ smooth = false } = {}) {
   const stageRect = stage.getBoundingClientRect();
   const itemRect  = active.getBoundingClientRect();
   const relativeLeft = itemRect.left - stageRect.left;
-  const contentLeft = relativeLeft + stage.scrollLeft;
-  const itemCenter = contentLeft + itemRect.width / 2;
+  const contentLeft  = relativeLeft + stage.scrollLeft; // <-- key Safari fix
+  const itemCenter   = contentLeft + itemRect.width / 2;
 
   let target = Math.round(itemCenter - stage.clientWidth / 2);
 
