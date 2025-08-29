@@ -178,4 +178,21 @@ document.addEventListener('DOMContentLoaded', () => {
         root.setAttribute('data-icons-ready', '1');
       });
   })();
+
+  // --- Safari iframe YouTube fix ---
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('.music-links a');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (!/youtube\.com\/playlist\?list=/.test(href)) return;
+    if (inIframe && isSafari) {
+      e.preventDefault();
+      try {
+        window.top.location.href = href;
+      } catch {
+        window.location.href = href;
+      }
+    }
+  });
+
 });
