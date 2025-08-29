@@ -179,20 +179,51 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   })();
 
-  // --- Safari iframe YouTube fix ---
+  // --- Safari/Chrome iframe YouTube hybrid tooltip workaround ---
+(function() {
+  const inIframe = (() => { try { return window.top !== window.self; } catch { return true; } })();
+  if (!inIframe) return; // only when embedded (e.g., in Carrd)
+
+  // Intercept clicks on YouTube playlist links inside the carousel icons
   document.addEventListener('click', (e) => {
     const a = e.target.closest('.music-links a');
     if (!a) return;
+
     const href = a.getAttribute('href') || '';
     if (!/youtube\.com\/playlist\?list=/.test(href)) return;
-    if (inIframe && isSafari) {
-      e.preventDefault();
-      try {
-        window.top.location.href = href;
-      } catch {
-        window.location.href = href;
-      }
-    }
+
+    // Block navigation inside sandboxed iframe and show a tooltip instead
+    e.preventDefault();
+
+    // Remove any existing tooltip
+    const old = document.querySelector('.yt-tooltip');
+    if (old) old.remove();
+
+    // Create tooltip near the click
+    const tip = document.createElement('div');
+    tip.className = 'yt-tooltip';
+    tip.textContent = 'Tap the YouTube button below to open this playlist ↴';
+
+    const x = (e.pageX || 20) + 10;
+    const y = (e.pageY || 20) + 10;
+
+    Object.assign(tip.style, {
+      position: 'absolute',
+      top: y + 'px',
+      left: x + 'px',
+      padding: '6px 10px',
+      background: 'rgba(0,0,0,0.85)',
+      color: '#fff',
+      borderRadius: '6px',
+      fontSize: '13px',
+      zIndex: 9999,
+      maxWidth: '240px',
+      pointerEvents: 'none'
+    });
+
+    document.body.appendChild(tip);
+    setTimeout(() => tip.remove(), 3000);
   });
+})();
 
 });
