@@ -12,7 +12,7 @@ html, body {
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-/*  background: #09131C; */
+  /*  background: #09131C; */
   color: #e7e7e7;
 }
 
@@ -70,7 +70,7 @@ body {
   height: var(--cover);
   display: grid;
   place-items: center;
-/*  background: #09131C; */
+  /*  background: #09131C; */
   border-radius: 5px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   overflow: hidden;
