@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Redirecting…</title>
+<style>
+  html,body{height:100%;margin:0;background:#0b1218;color:#cbd5e1;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;display:grid;place-items:center}
+  .card{padding:24px 28px;border-radius:14px;background:#0f1720;box-shadow:0 8px 30px rgba(0,0,0,.35);max-width:560px}
+  .muted{opacity:.7;font-size:14px}
+</style>
+<div class="card">
+  <div>Taking you to YouTube…</div>
+  <div class="muted">If nothing happens, <a id="lnk" href="#">click here</a>.</div>
+</div>
+<script>
+(function(){
+  try {
+    var p = new URLSearchParams(window.location.search);
+    var to = p.get('to');
+    if (!to) return;
+    var a = document.getElementById('lnk');
+    a.href = to;
+    // Prefer top navigation when allowed
+    try { window.top.location.replace(to); }
+    catch (e) { window.location.replace(to); }
+  } catch(e){ /* ignore */ }
+})();
+</script>
