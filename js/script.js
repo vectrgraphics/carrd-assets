@@ -141,10 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
       else if (src.includes('spotify'))      a.classList.add('icon--spotify');
       else if (src.includes('youtube_music')) a.classList.add('icon--youtube_music');
     });
-  });
   }
 
-  (function loadSprite () {
+(function loadSprite () {
     var SPRITE_URL = 'https://vectrgraphics.github.io/carrd-assets/images/icons/music-icons.svg';
     var root = document.documentElement;
     root.setAttribute('data-icons-ready', '0');
