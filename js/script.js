@@ -131,11 +131,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.music-links .icon').forEach(a => {
       const img = a.querySelector('img');
       if (!img) return;
+
+      // ensure outbound links open in new tab securely
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+
       const src = (img.getAttribute('src') || '').toLowerCase();
-           if (src.includes('apple_music')) a.classList.add('icon--apple_music');
-      else if (src.includes('spotify'))    a.classList.add('icon--spotify');
+           if (src.includes('apple_music'))  a.classList.add('icon--apple_music');
+      else if (src.includes('spotify'))      a.classList.add('icon--spotify');
       else if (src.includes('youtube_music')) a.classList.add('icon--youtube_music');
     });
+  });
   }
 
   (function loadSprite () {
