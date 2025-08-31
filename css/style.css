@@ -156,3 +156,19 @@ html[data-icons-ready="1"] .music-links { visibility: visible; }
 
 .icon::before, .icon::after { display: none !important; }
 .icon > img { display: block !important; width: 48px; height: 48px; }
+
+/* --- Mobile tuning: smaller cover + compact controls for iPhone widths --- */
+@media (max-width: 600px) {
+  :root { --gap: 20px; }
+  /* shrink the cover a bit more than before so it fits comfortably in iframes */
+  :root { --cover: min(82vw, 512px); }
+}
+@media (max-width: 420px) {
+  :root { --cover: min(80vw, 512px); }
+  .music-links { gap: 10px; margin-top: 16px; }
+  .music-links .icon { width: 44px; height: 44px; border-width: 2px; }
+  .music-links .icon svg { width: 44px; height: 44px; }
+  .chevron { width: 20px; height: 30px; }
+  .chevron.left { left: 16px; }
+  .chevron.right { right: 16px; }
+}
