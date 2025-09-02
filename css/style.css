@@ -79,7 +79,7 @@ body {
 .cover-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;             
+  object-fit: cover;             
   image-rendering: auto;
   display: block;
 /*  background: #09131C; */
@@ -157,32 +157,40 @@ html[data-icons-ready="1"] .music-links { visibility: visible; }
 .icon::before, .icon::after { display: none !important; }
 .icon > img { display: block !important; width: 48px; height: 48px; }
 
-/* --- Mobile tuning: smaller cover + compact controls for iPhone widths --- */
-@media (max-width: 600px) {
-  :root { --gap: 20px; }
-}
-@media (max-width: 420px) {
-  .music-links { gap: 10px; margin-top: 16px; }
-  .music-links .icon { width: 44px; height: 44px; border-width: 2px; }
+.music-links .icon { width: 44px; height: 44px; border-width: 2px; }
   .music-links .icon svg { width: 44px; height: 44px; }
   .chevron { width: 20px; height: 30px; }
   .chevron.left { left: 16px; }
   .chevron.right { right: 16px; }
 }
 
-/* Smaller cover for phones */
+/* Phone: make the cover fill the iframe width */
 @media (max-width: 600px) {
-  :root { --cover: min(78vw, 512px); }   /* was 82–88vw; now tighter */
-}
-@media (max-width: 420px) {
-  :root { --cover: min(74vw, 512px); }   /* extra trim on small phones */
+  :root { --cover: min(100vw, 512px); } /* full width on phones, still capped at 512 if larger */
 }
 
-/* Ensure the cover actually follows --cover */
+/* Ensure the cover actually uses --cover */
 .carousel-item .cover,
-.carousel-item .cover img {
+.carousel-item .cover img,
+.cover-block {
   width: var(--cover);
   height: var(--cover);
   max-width: 100%;
   object-fit: cover;
+}
+
+/* === Mobile (iPhone) sizing: full-width square cover, capped at 512px === */
+@media (max-width: 600px) {
+  :root { --cover: min(100vw, 512px); }
+
+  .carousel-item,
+  .cover-block {
+    width: var(--cover);
+    height: var(--cover);
+    border-radius: 6px;
+  }
+
+  .cover-image {
+    object-fit: cover;
+  }
 }
