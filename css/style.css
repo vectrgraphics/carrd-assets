@@ -208,3 +208,9 @@ html[data-icons-ready="1"] .music-links { visibility: visible; }
     height: var(--cover);
   }
 }
+
+@media (max-width: 600px) {
+  :root { --cover: min(96vw, 512px); } /* or 100vw if you like */
+  .cover-block, .carousel-item { width: var(--cover); height: var(--cover); }
+  .cover-image { object-fit: cover; }
+}

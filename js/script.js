@@ -180,3 +180,26 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 
 });
+
+// Auto-size: report page height to parent (Carrd) whenever it changes
+(function () {
+  const ORIGIN_OK = "*"; // or set to your Carrd domain, e.g. "https://vectrgraphics.com"
+
+  function sendHeight() {
+    const h = Math.ceil(document.documentElement.scrollHeight);
+    window.parent?.postMessage({ type: "VECTR_IFRAME_SIZE", height: h }, ORIGIN_OK);
+  }
+
+  // Initial + after load
+  sendHeight();
+  window.addEventListener("load", sendHeight);
+
+  // Re-send on layout changes
+  const ro = new ResizeObserver(sendHeight);
+  ro.observe(document.documentElement);
+  ro.observe(document.body);
+
+  // Also on orientation/viewport changes
+  window.addEventListener("orientationchange", sendHeight);
+  window.addEventListener("resize", sendHeight);
+})();
