@@ -146,22 +146,9 @@ html[data-icons-ready="1"] .music-links { visibility: visible; }
 
 @media (max-width: 600px) {
   :root { --gap: 24px; }
-  .carousel-item,
-  .cover-block { width: min(88vw, var(--cover)); }
-  .cover-block { height: min(88vw, var(--cover)); border-radius: 6px; }
   .chevron { width: 24px; height: 36px; }
   .chevron.left { left: 24px; }
   .chevron.right { right: 24px; }
-}
-
-.icon::before, .icon::after { display: none !important; }
-.icon > img { display: block !important; width: 48px; height: 48px; }
-
-.music-links .icon { width: 44px; height: 44px; border-width: 2px; }
-  .music-links .icon svg { width: 44px; height: 44px; }
-  .chevron { width: 20px; height: 30px; }
-  .chevron.left { left: 16px; }
-  .chevron.right { right: 16px; }
 }
 
 /* Phone: make the cover fill the iframe width */
@@ -192,5 +179,32 @@ html[data-icons-ready="1"] .music-links { visibility: visible; }
 
   .cover-image {
     object-fit: cover;
+  }
+}
+
+/* === Phone: force a smaller rendered size for the square cover === */
+@media (max-width: 600px) {
+  :root { --cover: min(96vw, 512px); } /* use 96vw or 100vw; both downscale the big source */
+
+  /* The visual square for the artwork */
+  .cover-block {
+    width: var(--cover);
+    height: var(--cover);
+    border-radius: 6px; /* optional */
+  }
+
+  /* Make the image fill that square */
+  .cover-block img,
+  .cover-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* no letterboxing; trims to square when needed */
+    display: block;
+  }
+
+  /* If your slide wrapper also sets a size, keep it in sync */
+  .carousel-item {
+    width: var(--cover);
+    height: var(--cover);
   }
 }
