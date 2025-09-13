@@ -203,3 +203,38 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener("orientationchange", sendHeight);
   window.addEventListener("resize", sendHeight);
 })();
+
+/* === Auto-size iframe: report content height to parent === */
+(function () {
+  var TARGET_ORIGIN = "*"; // set to "https://vectrgraphics.com" if you want to restrict
+
+  function sendHeight() {
+    try {
+      var h = Math.ceil(document.documentElement.scrollHeight);
+      window.parent && window.parent.postMessage({ type: "VECTR_IFRAME_SIZE", height: h }, TARGET_ORIGIN);
+    } catch (e) {}
+  }
+
+  // Watch for layout changes
+  if (typeof ResizeObserver !== "undefined") {
+    var ro = new ResizeObserver(function () { requestAnimationFrame(sendHeight); });
+    ro.observe(document.documentElement);
+    ro.observe(document.body);
+  }
+
+  // Initial + after load
+  if (document.readyState === "complete") sendHeight();
+  else {
+    window.addEventListener("DOMContentLoaded", sendHeight);
+    window.addEventListener("load", sendHeight);
+  }
+
+  // Also on viewport/orientation changes
+  window.addEventListener("resize", sendHeight);
+  window.addEventListener("orientationchange", sendHeight);
+
+  // After images decode (Safari-friendly)
+  Promise.allSettled(Array.from(document.images).map(function (img) {
+    return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+  })).then(function(){ sendHeight(); });
+})();
