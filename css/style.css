@@ -1,149 +1,186 @@
-/* === Base variables === */
-:root{
-  --cover: 512px;
-  --gap: 24px;
-  --fade: 0.1;
-  --ms: 400ms;
+:root {
+  --cover: 512px;           
+  --gap: 24px;                
+  --fade: 0.1;               
+  --ms: 400ms;                
 }
 
-/* === Document === */
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
-  color:#e7e7e7;
+html, body {
+  height: 100%;
 }
 
-/* === Carousel track === */
-.carousel{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:var(--gap);
-  padding:0;
-  overflow-x:auto;
-  overflow-y:hidden;
-  scroll-behavior:smooth;
-  -webkit-overflow-scrolling:touch;
-  visibility:hidden; /* shown when data-ready=1 */
-  /* snap (CSS, JS also sets as fallback) */
-  scroll-snap-type:x mandatory;
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  /*  background: #09131C; */
+  color: #e7e7e7;
 }
-.carousel[data-ready="1"]{visibility:visible}
-.carousel::-webkit-scrollbar{display:none}
-.carousel{scrollbar-width:none}
 
-/* Edge spacers: center the active slide without viewport units */
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+  padding: 0; 
+  overflow-x: auto;                
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  visibility: hidden;              
+}
+.carousel[data-ready="1"] {
+  visibility: visible;
+}
+
+.carousel::-webkit-scrollbar { display: none; }
+.carousel { scrollbar-width: none; }
+
 .carousel::before,
-.carousel::after{
-  content:"";
-  flex:0 0 clamp(0px, calc((100% - var(--cover)) / 2), 100%);
+.carousel::after {
+  content: "";
+  /* keep the same intent, but avoid viewport units inside iframes */
+  flex: 0 0 clamp(0px, calc((100% - var(--cover)) / 2), 100%);
 }
 
-/* === Slides === */
-.carousel-item{
-  flex:0 0 auto;
-  width:var(--cover);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  opacity:0.1;
-  pointer-events:none;
-  transition:opacity var(--ms) ease;
-  will-change:opacity;
-  scroll-snap-align:center;
+.carousel-item {
+  flex: 0 0 auto;
+  width: var(--cover);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ms) ease;
+  will-change: opacity;
 }
-.carousel-item.active{opacity:1;pointer-events:auto}
+
+.carousel-item.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .carousel-item.left,
-.carousel-item.right{opacity:var(--fade)}
-
-/* === Artwork === */
-.cover-block{
-  width:var(--cover);
-  height:var(--cover);
-  display:grid;
-  place-items:center;
-  border-radius:5px;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
-  overflow:hidden;
-}
-.cover-image{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  image-rendering:auto;
-  display:block;
+.carousel-item.right {
+  opacity: var(--fade); 
 }
 
-/* === Music links === */
-html[data-icons-ready="0"] .music-links{visibility:hidden}
-html[data-icons-ready="1"] .music-links{visibility:visible}
-
-.music-links{
-  display:flex;
-  gap:12px;
-  margin-top:24px;
-  align-items:center;
-  justify-content:center;
+.cover-block {
+  width: var(--cover);
+  height: var(--cover);
+  display: grid;
+  place-items: center;
+  /*  background: #09131C; */
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  overflow: hidden;
 }
-.music-links .icon{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:48px;
-  height:48px;
-  border:2px solid #fff;
-  border-radius:9999px;
-  background:#fff;
-  text-decoration:none;
+
+.cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;             
+  image-rendering: auto;
+  display: block;
+/*  background: #09131C; */
 }
-.music-links .icon svg{width:48px;height:48px;display:block}
-.icon:hover{opacity:.8}
-.icon:active{opacity:.7}
-.icon--apple_music{color:#e63e45}
-.icon--spotify{color:#65d46e}
-.icon--youtube_music{color:#ea333d}
 
-/* === Chevrons (positioned within the carousel) === */
-.chevron{
-  position:absolute;      /* was fixed; absolute keeps it within the carousel */
-  top:50%;
-  transform:translateY(-50%);
-  width:24px;
-  height:36px;
-  display:grid;
-  place-items:center;
-  background:transparent;
-  border:0;
-  padding:0;
-  cursor:pointer;
-  z-index:5;
-  opacity:1;
-  transition:opacity 160ms ease, transform 160ms ease;
+/* --- Music links --- */
+html[data-icons-ready="0"] .music-links { visibility: hidden; }
+html[data-icons-ready="1"] .music-links { visibility: visible; }
+
+.music-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  align-items: center;
+  justify-content: center;
 }
-.chevron:hover{opacity:1;transform:translateY(-50%) scale(1.1)}
-.chevron:active{transform:translateY(-50%) scale(0.9)}
-.chevron.left{left:24px}
-.chevron.right{right:24px}
-.chevron.left img{transform:rotate(180deg)}
 
-/* === Mobile (≤600px): single source of truth === */
-@media (max-width:600px){
-  /* full-width square on phones (use 96vw for small gutter; 100vw for edge-to-edge) */
-  :root{ --cover: min(96vw, 512px); }
+/* Button wrapper: transparent with 2px white border */
+.music-links .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid #fff;      /* outer white ring */
+  border-radius: 9999px;       /* circle */
+  background: #fff;
+  text-decoration: none;
+}
 
+/* Size all SVGs consistently */
+.music-links .icon svg {
+  width: 48px;
+  height: 48px;
+  display: block;
+}
+.icon:hover { opacity: 0.8; }
+.icon:active { opacity: 0.7; }
+
+.icon--apple_music { color: #e63e45; }
+.icon--spotify { color: #65d46e; }
+.icon--youtube_music { color: #ea333d; }
+
+.chevron {
+  position: fixed;
+  transform: translateY(-50%); 
+  width: 24px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  z-index: 5;
+  opacity: 1;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.chevron:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+.chevron:active { transform: translateY(-50%) scale(0.9); }
+.chevron.left { left: 24px; }
+.chevron.right { right: 24px; }
+.chevron.left img { transform: rotate(180deg); }
+
+@media (max-width: 600px) {
+  :root { --gap: 24px; }
   .carousel-item,
-  .cover-block{
-    width:var(--cover);
-    height:var(--cover);
-    border-radius:6px;
-  }
+  .cover-block { width: min(88vw, var(--cover)); }
+  .cover-block { height: min(88vw, var(--cover)); border-radius: 6px; }
+  .chevron { width: 24px; height: 36px; }
+  .chevron.left { left: 24px; }
+  .chevron.right { right: 24px; }
+}
 
-  .cover-image{ object-fit:cover }
+.icon::before, .icon::after { display: none !important; }
+.icon > img { display: block !important; width: 48px; height: 48px; }
 
-  /* chevrons slightly tighter on phones */
-  .chevron{ width:24px; height:36px }
-  .chevron.left{ left:24px }
-  .chevron.right{ right:24px }
+/* --- Mobile tuning: smaller cover + compact controls for iPhone widths --- */
+@media (max-width: 600px) {
+  :root { --gap: 20px; }
+}
+@media (max-width: 420px) {
+  .music-links { gap: 10px; margin-top: 16px; }
+  .music-links .icon { width: 44px; height: 44px; border-width: 2px; }
+  .music-links .icon svg { width: 44px; height: 44px; }
+  .chevron { width: 20px; height: 30px; }
+  .chevron.left { left: 16px; }
+  .chevron.right { right: 16px; }
+}
+
+/* Phone: make the cover fill the iframe width */
+@media (max-width: 600px) {
+  :root { --cover: min(100vw, 512px); } /* full width on phones, still capped at 512 if larger */
+}
+
+/* Ensure the cover actually uses --cover */
+.carousel-item .cover,
+.carousel-item .cover img,
+.cover-block {
+  width: var(--cover);
+  height: var(--cover);
+  max-width: 100%;
+  object-fit: cover;
 }
