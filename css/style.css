@@ -49,7 +49,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  opacity: 0.1;
+  opacity: 0;
   pointer-events: none;
   transition: opacity var(--ms) ease;
   will-change: opacity;
@@ -65,25 +65,29 @@ body {
   opacity: var(--fade); 
 }
 
-.cover-block {
-  width: var(--cover);
-  height: var(--cover);
-  display: grid;
-  place-items: center;
-  /*  background: #09131C; */
-  border-radius: 5px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  overflow: hidden;
-}
-
+/* Make the image fill the square like the container expects */
 .cover-image {
   width: 100%;
   height: 100%;
-  object-fit: contain;             
-  image-rendering: auto;
+  object-fit: cover;          /* was contain */
   display: block;
-/*  background: #09131C; */
 }
+
+/* Target what you actually have in the DOM (no stray .cover selector) */
+.cover-block {
+  width: var(--cover);
+  height: var(--cover);
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  /* iOS: keep image+shadow in the same compositing layer */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* If any slide uses transforms/opacity, promote the moving piece too */
+.carousel-item { will-change: opacity; }
+.cover-image { backface-visibility: hidden; transform: translateZ(0); }
 
 /* --- Music links --- */
 html[data-icons-ready="0"] .music-links { visibility: hidden; }
