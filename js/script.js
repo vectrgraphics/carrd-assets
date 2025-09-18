@@ -9,25 +9,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ... your existing carousel code ...
 
-  // === New: wrap cover images with Apple Music links ===
-  const covers = document.querySelectorAll(".cover-image");
+  // === Wrap each cover image with its slide's Apple Music link ===
+const covers = document.querySelectorAll(".cover-image");
 
-  covers.forEach(img => {
-    // Match covers/34.jpg, covers/34.png, covers/34.jpeg (case-insensitive)
-    const match = img.src.match(/covers\/(\d+)\.(jpe?g|png)$/i);
-    if (!match) return;
+covers.forEach(img => {
+  // If it's already wrapped in a link, skip
+  if (img.closest('a')) return;
 
-    const num = match[1].padStart(3, "0"); // ensures 001, 034, etc.
-    const link = document.createElement("a");
-    link.href = `https://music.apple.com/au/playlist/vectr-${num}/pl.u-BvaRFvqdZk`;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.setAttribute("aria-label", `Listen to Vectr ${num} on Apple Music`);
+  // Find the slide and its Apple Music anchor
+  const item = img.closest('.carousel-item');
+  const apple = item?.querySelector('.music-links a[aria-label="apple_music"]');
+  if (!apple) return;
 
-    // Wrap the image in the link
-    img.parentNode.insertBefore(link, img);
-    link.appendChild(img);
-  });
+  // Clone a safe, outbound link
+  const link = document.createElement('a');
+  link.href   = apple.href;               // <-- use the per-slide URL from HTML
+  link.target = "_blank";
+  link.rel    = "noopener noreferrer";
+  link.setAttribute("aria-label", apple.getAttribute('aria-label') || "Listen on Apple Music");
+
+  // Wrap the image
+  img.parentNode.insertBefore(link, img);
+  link.appendChild(img);
+});
 
   // Environment flags
   const inIframe = (() => { try { return window.top !== window.self; } catch { return true; } })();
