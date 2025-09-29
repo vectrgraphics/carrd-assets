@@ -264,3 +264,29 @@ covers.forEach(img => {
     return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
   })).then(function(){ sendHeight(); });
 })();
+
+(function () {
+  const PARENT_ORIGIN = "https://vectrgraphics.com"; // your Carrd domain
+  function postSize() {
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: "VECTR_IFRAME_SIZE", height: h }, PARENT_ORIGIN);
+  }
+
+  // Reply when the parent asks
+  window.addEventListener("message", function(e) {
+    if (e.origin !== PARENT_ORIGIN) return;
+    const msg = e.data || {};
+    if (msg.type === "VECTR_IFRAME_REQUEST_SIZE") postSize();
+  });
+
+  // Post on load, after images/fonts settle, and on any content change
+  window.addEventListener("load", () => {
+    postSize();
+    setTimeout(postSize, 200);   // catch late layout
+    setTimeout(postSize, 800);   // catch webfont/image pops
+  });
+
+  // Track any DOM/layout changes (carousel slides, font swaps, etc.)
+  const ro = new ResizeObserver(() => postSize());
+  ro.observe(document.documentElement);
+})();
