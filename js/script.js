@@ -207,64 +207,6 @@ covers.forEach(img => {
 
 });
 
-// Auto-size: report page height to parent (Carrd) whenever it changes
-(function () {
-  const ORIGIN_OK = "*"; // or set to your Carrd domain, e.g. "https://vectrgraphics.com"
-
-  function sendHeight() {
-    const h = Math.ceil(document.documentElement.scrollHeight);
-    window.parent?.postMessage({ type: "VECTR_IFRAME_SIZE", height: h }, ORIGIN_OK);
-  }
-
-  // Initial + after load
-  sendHeight();
-  window.addEventListener("load", sendHeight);
-
-  // Re-send on layout changes
-  const ro = new ResizeObserver(sendHeight);
-  ro.observe(document.documentElement);
-  ro.observe(document.body);
-
-  // Also on orientation/viewport changes
-  window.addEventListener("orientationchange", sendHeight);
-  window.addEventListener("resize", sendHeight);
-})();
-
-/* === Auto-size iframe: report content height to parent === */
-(function () {
-  var TARGET_ORIGIN = "*"; // set to "https://vectrgraphics.com" if you want to restrict
-
-  function sendHeight() {
-    try {
-      var h = Math.ceil(document.documentElement.scrollHeight);
-      window.parent && window.parent.postMessage({ type: "VECTR_IFRAME_SIZE", height: h }, TARGET_ORIGIN);
-    } catch (e) {}
-  }
-
-  // Watch for layout changes
-  if (typeof ResizeObserver !== "undefined") {
-    var ro = new ResizeObserver(function () { requestAnimationFrame(sendHeight); });
-    ro.observe(document.documentElement);
-    ro.observe(document.body);
-  }
-
-  // Initial + after load
-  if (document.readyState === "complete") sendHeight();
-  else {
-    window.addEventListener("DOMContentLoaded", sendHeight);
-    window.addEventListener("load", sendHeight);
-  }
-
-  // Also on viewport/orientation changes
-  window.addEventListener("resize", sendHeight);
-  window.addEventListener("orientationchange", sendHeight);
-
-  // After images decode (Safari-friendly)
-  Promise.allSettled(Array.from(document.images).map(function (img) {
-    return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
-  })).then(function(){ sendHeight(); });
-})();
-
 (function () {
   const PARENT_ORIGIN = "https://vectrgraphics.com"; // your Carrd domain
   function postSize() {
@@ -272,21 +214,18 @@ covers.forEach(img => {
     window.parent.postMessage({ type: "VECTR_IFRAME_SIZE", height: h }, PARENT_ORIGIN);
   }
 
-  // Reply when the parent asks
   window.addEventListener("message", function(e) {
     if (e.origin !== PARENT_ORIGIN) return;
     const msg = e.data || {};
     if (msg.type === "VECTR_IFRAME_REQUEST_SIZE") postSize();
   });
 
-  // Post on load, after images/fonts settle, and on any content change
   window.addEventListener("load", () => {
     postSize();
-    setTimeout(postSize, 200);   // catch late layout
-    setTimeout(postSize, 800);   // catch webfont/image pops
+    setTimeout(postSize, 200);
+    setTimeout(postSize, 800);
   });
 
-  // Track any DOM/layout changes (carousel slides, font swaps, etc.)
   const ro = new ResizeObserver(() => postSize());
   ro.observe(document.documentElement);
 })();
