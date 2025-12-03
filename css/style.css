@@ -12,8 +12,49 @@ html, body {
 body {
   margin: 0;
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-  /*  background: #09131C; */
-  color: #e7e7e7;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: clamp(3rem, 12vw, 6rem);
+  text-transform: lowercase;
+  
+  /* Subtle, near-white gradient with faint tint shifts */
+  background: linear-gradient(
+    90deg,
+    rgba(240,255,255,1) 0%,   /* slight cyan */
+    rgba(255,240,255,1) 30%,  /* slight magenta */
+    rgba(255,255,240,1) 65%,  /* slight yellow */
+    rgba(240,255,250,1) 100%  /* slight turquoise */
+  );
+  
+  /* Make the gradient “bigger” than the text so movement is visible */
+  background-size: 300% 100%;
+  background-position: 0% 50%;
+  
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  /* Continuous shimmer */
+  animation: shimmer 12s ease-in-out infinite alternate;
+}
+
+/* Respect users who disable motion */
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    animation: none;
+    background-position: 50% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
 }
 
 .carousel {
