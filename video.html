@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vectr.graphics — video artwork</title>
+<style>
+html,body{margin:0;background:transparent;}
+video{display:block;width:100%;height:auto;aspect-ratio:91/159;object-fit:contain;background:#071b16;}
+</style>
+</head>
+<body>
+<video id="artwork" controls muted loop playsinline preload="metadata" poster="ai_video-poster.jpg" aria-label="Animated video artwork by vectr.graphics">
+<source src="ai_video.mp4" type="video/mp4">
+<a href="ai_video.mp4">Watch the video artwork</a>
+</video>
+<script>
+const video=document.getElementById('artwork');
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+if(!reducedMotion.matches){
+  const observer=new IntersectionObserver(entries=>{
+    for(const entry of entries){
+      if(entry.isIntersecting){video.play().catch(()=>{});}else{video.pause();}
+    }
+  },{threshold:0.25});
+  observer.observe(video);
+}
+</script>
+</body>
+</html>
