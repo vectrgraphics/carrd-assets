@@ -787,37 +787,9 @@
 <button class="chevron left"><img alt="Previous" src="https://vectrgraphics.github.io/carrd-assets/images/navigation/chevron.svg"/></button>
 <button class="chevron right"><img alt="Next" src="https://vectrgraphics.github.io/carrd-assets/images/navigation/chevron.svg"/></button>
 </div>
-<!-- Temporary featured artwork: remove this block when no longer needed. -->
-<figure id="temporary-artwork" style="width:min(100%,512px);margin:60px auto 0;">
-<img src="images/art/art1.png" width="512" height="1536" alt="Abstract artwork with flowing red and blue ribbons, glowing golden lights and a yellow form against black." loading="eager" decoding="async" style="display:block;width:100%;height:auto;">
-</figure>
-<!-- End temporary featured artwork. -->
-<!-- New artwork appears above the original Carrd video embed. -->
 <style>
 html, body { height: auto; }
-.new-video-artwork { width: min(100%, 512px); margin: 60px auto 0; }
-.new-video-artwork video { display: block; width: 100%; height: auto; aspect-ratio: 135/236; object-fit: contain; background: #071b16; }
 </style>
-<div class="new-video-artwork">
-<video id="artwork-two" controls muted loop playsinline preload="metadata" width="1080" height="1888" poster="video/ai_video2-poster.jpg" aria-label="New animated video artwork by vectr.graphics">
-<source src="video/ai_video2.mp4" type="video/mp4">
-<a href="video/ai_video2.mp4">Watch the new video artwork</a>
-</video>
-</div>
-<script>
-(() => {
-  const video = document.getElementById('artwork-two');
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) video.play().catch(() => {});
-        else video.pause();
-      }
-    }, { threshold: 0.25 });
-    observer.observe(video);
-  }
-})();
-</script>
 <script defer="" src="https://vectrgraphics.github.io/carrd-assets/js/script.js?v=14"></script>
 </body>
 </html>
