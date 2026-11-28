@@ -23,3 +23,21 @@
   if (document.readyState === 'complete') preloadGallery();
   else window.addEventListener('load', preloadGallery, { once: true });
 })();
+
+// Display the featured artwork above the video on the Carrd homepage.
+(() => {
+  function showArtwork() {
+    const video = document.querySelector('iframe[title="vectr.graphics video artwork"]');
+    if (!video || document.getElementById('the-critical-line')) return;
+    const artwork = document.createElement('img');
+    artwork.id = 'the-critical-line';
+    artwork.alt = 'The Critical Line — abstract artwork by vectr.graphics';
+    artwork.width = 1152;
+    artwork.height = 2048;
+    artwork.style.cssText = 'display:block;width:min(100%,512px);height:auto;margin:36px auto';
+    artwork.src = 'https://vectrgraphics.github.io/carrd-assets/the-critical-line.svg';
+    video.parentElement.before(artwork);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', showArtwork, { once: true });
+  else showArtwork();
+})();
